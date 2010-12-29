@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
@@ -13,8 +14,10 @@ namespace OutlookGTD.UI
     public partial class ThisAddIn
     {
         private TaskItem _taskItem;
+        private MailItem _mailItem;
         private TaskGTDView _taskPaneControl;
         private Microsoft.Office.Tools.CustomTaskPane _customTaskPane;
+        
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
@@ -42,6 +45,8 @@ namespace OutlookGTD.UI
 
         private void Application_ItemLoad(object Item)
         {
+            _taskItem = null;
+            _mailItem = null;
             if (Item is Outlook.TaskItem)
             {
 
@@ -50,19 +55,45 @@ namespace OutlookGTD.UI
                 taskItem.Read += new Outlook.ItemEvents_10_ReadEventHandler(taskItem_Read);
 
                 // Open side bar
-                _customTaskPane.Visible = true;
+                //_customTaskPane.Visible = true;
+            }
+            else if (Item is MailItem)
+            {
+                var mailItem = Item as MailItem;
+                _mailItem = mailItem;
+                mailItem.Read += new ItemEvents_10_ReadEventHandler(taskItem_Read);
             }
             else
             {
-                _customTaskPane.Visible = false;
+                // Hide side bar
+                //_customTaskPane.Visible = false;
             }
         }
-
+      
         private void taskItem_Read()
         {
-            Debug.WriteLine(_taskItem.Subject + ":" + _taskItem.Body);
+            //Debug.WriteLine(_taskItem.Subject + ":" + _taskItem.Body);
+            if (_taskItem != null)
+            {
+                _taskPaneControl.Subject = _taskItem.Subject;
+                _taskPaneControl.Folder = _taskItem.Application.ActiveExplorer().CurrentFolder.Name;
 
-            // TODO: Set task in side bar
+            }
+            else if (_mailItem != null)
+            {
+                _taskPaneControl.Subject = _mailItem.Subject;
+                _taskPaneControl.Folder = _mailItem.Application.ActiveExplorer().CurrentFolder.Name;
+                //_mailItem.Id
+                
+                // TODO: visa subject, folderpath, EntryId
+                // TODO: gör länk i task-body:n med detta
+                // TODO: parsa länk och visa i listvy i side:baren för en task
+
+                //_taskPaneControl.ConversationId =
+                //_mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
+                    //_mailItem.ConversationID;
+                
+            }
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
