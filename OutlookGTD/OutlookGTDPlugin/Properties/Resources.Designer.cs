@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OutlookGTDPlugin.Properties {
+namespace OutlookGTD.UI.Properties {
     
     
     /// <summary>

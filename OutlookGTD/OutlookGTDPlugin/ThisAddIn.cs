@@ -8,7 +8,7 @@ using Microsoft.Office.Interop.Outlook;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 
-namespace OutlookGTDPlugin
+namespace OutlookGTD.UI
 {
     public partial class ThisAddIn
     {

@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutlookGTDPlugin", "OutlookGTDPlugin\OutlookGTDPlugin.csproj", "{4785EC7D-7137-4CA1-AC8D-EA9B19F3098B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutlookGTDPlugin.2010", "OutlookGTDPlugin\OutlookGTDPlugin.2010.csproj", "{4785EC7D-7137-4CA1-AC8D-EA9B19F3098B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutlookGTP.UI", "OutlookGTP.UI\OutlookGTP.UI.csproj", "{52AD7BE4-B813-4EE4-A32E-82FCFB8F25D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{4785EC7D-7137-4CA1-AC8D-EA9B19F3098B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4785EC7D-7137-4CA1-AC8D-EA9B19F3098B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4785EC7D-7137-4CA1-AC8D-EA9B19F3098B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52AD7BE4-B813-4EE4-A32E-82FCFB8F25D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52AD7BE4-B813-4EE4-A32E-82FCFB8F25D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52AD7BE4-B813-4EE4-A32E-82FCFB8F25D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52AD7BE4-B813-4EE4-A32E-82FCFB8F25D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
