@@ -21,28 +21,53 @@ namespace OutlookGTD.UI
             set { _subjectTextBox.Text = value; }
         }
 
-        public string Folder
+        public string FolderPath
         {
             get { return _folderTextBox.Text; }
             set { _folderTextBox.Text = value; }
         }
 
-        public string ConversationId
+        public string EntryId
         {
-            get { return _conversationIdTextBox.Text; }
-            set { _conversationIdTextBox.Text = value; }
-        }
-
-        public string Store
-        {
-            get { return _storeTextBox.Text; }
-            set { _storeTextBox.Text = value; }
+            get { return _entryIdTextBox.Text; }
+            set { _entryIdTextBox.Text = value; }
         }
 
         public void ShowMessage(string message)
         {
             MessageBox.Show(message);
         }
+
+        public void SetSubjects(List<MessageWrapper> subjects)
+        {
+            _conversationTtreeView.Nodes.Clear();
+            foreach (var item in subjects)
+            {
+                TreeNode node = new TreeNode(item.Header);
+                node.Tag = item.Body;
+                _conversationTtreeView.Nodes.Add(node);
+            }
+        }
+
+        private void _conversationTtreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            
+            string messageBody = e.Node.Tag as string;
+            if (messageBody != null)
+            {
+                _bodyTextBox.Text = messageBody;
+            }
+            else
+            {
+                _bodyTextBox.Text = "";
+            }
+        }
+    }
+
+    public class MessageWrapper
+    {
+        public string Header { get; set; }
+        public string Body { get; set; }
     }
 }
 

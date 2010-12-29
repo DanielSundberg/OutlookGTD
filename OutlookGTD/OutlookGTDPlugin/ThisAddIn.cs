@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -76,24 +77,88 @@ namespace OutlookGTD.UI
             if (_taskItem != null)
             {
                 _taskPaneControl.Subject = _taskItem.Subject;
-                _taskPaneControl.Folder = _taskItem.Application.ActiveExplorer().CurrentFolder.Name;
+                _taskPaneControl.FolderPath = "";
+                _taskPaneControl.EntryId = "";
 
+                //Dictionary<string, List<string>> subjectDictionary = new Dictionary<string, List<string>>();
+                List<MessageWrapper> subjects = new List<MessageWrapper>();
+
+                // Parse links of format
+                // MailLink=\\daniel.sundberg@tekis.se\Inbox:<EntryId>
+                // TODO: get items from deeper folder levels
+                using (StringReader stringReader = new StringReader(_taskItem.Body))
+                {
+                    while (stringReader.Peek() > 0)
+                    {
+                        string line = stringReader.ReadLine();
+                        if (line.StartsWith("MailLink"))
+                        {
+                            string data = line.Substring(9);
+                            var keys = data.Split(new[] {':'});
+                            var entryId = keys[1];
+
+                            var folderPath = keys[0].Split(new char[] {'\\'});
+                            string folder = folderPath[folderPath.Length - 1];
+
+                            MailItem mailItem = GetMailItem(folder, entryId);
+
+
+                            MessageWrapper messageWrapper = new MessageWrapper();
+                            messageWrapper.Header = mailItem.Subject + "(" + mailItem.SenderName + ")";
+                            messageWrapper.Body = mailItem.Body;
+                            subjects.Add(messageWrapper);
+
+                        }
+                    }
+                }
+                _taskPaneControl.SetSubjects(subjects);
             }
             else if (_mailItem != null)
             {
                 _taskPaneControl.Subject = _mailItem.Subject;
-                _taskPaneControl.Folder = _mailItem.Application.ActiveExplorer().CurrentFolder.Name;
-                //_mailItem.Id
+                _taskPaneControl.FolderPath = _mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
+                _taskPaneControl.EntryId = _mailItem.EntryID;
+
+
+
                 
-                // TODO: visa subject, folderpath, EntryId
                 // TODO: gör länk i task-body:n med detta
                 // TODO: parsa länk och visa i listvy i side:baren för en task
 
                 //_taskPaneControl.ConversationId =
                 //_mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
-                    //_mailItem.ConversationID;
-                
+                //_mailItem.ConversationID;
+
             }
+        }
+
+        private MailItem GetMailItem(string folder, string entryId)
+        {
+            Folders childFolders = (Application.Session.DefaultStore.GetRootFolder() as Outlook.Folder).Folders;
+            if (childFolders.Count > 0)
+            {
+                Folder currentFolder = null;
+                foreach (Folder childFolder in childFolders)
+                {
+                    if (childFolder.Name == folder)
+                    {
+                        currentFolder = childFolder;
+                        break;
+                    }
+                }
+                if (currentFolder != null)
+                {
+                    foreach (MailItem mailItem in currentFolder.Items)
+                    {
+                        if (mailItem.EntryID == entryId)
+                        {
+                            return mailItem;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
