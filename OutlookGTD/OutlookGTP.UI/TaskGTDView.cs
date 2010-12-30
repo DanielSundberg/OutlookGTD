@@ -5,11 +5,17 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using OutlookGTP.UI;
 
 namespace OutlookGTD.UI
 {
     public partial class TaskGTDView : UserControl
     {
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message);
+        }
+
         public TaskGTDView()
         {
             InitializeComponent();
@@ -33,17 +39,13 @@ namespace OutlookGTD.UI
             set { _entryIdTextBox.Text = value; }
         }
 
-        public void ShowMessage(string message)
+        public void SetLinkedMessages(List<MessageWrapper> subjects)
         {
-            MessageBox.Show(message);
-        }
-
-        public void SetSubjects(List<MessageWrapper> subjects)
-        {
+            // TODO: Check if node.Tag leaks memory
             _conversationTtreeView.Nodes.Clear();
             foreach (var item in subjects)
             {
-                TreeNode node = new TreeNode(item.Header);
+                TreeNode node = new TreeNode(string.Format("{0} ({1})", item.Subject, item.Sender));
                 node.Tag = item.Body;
                 _conversationTtreeView.Nodes.Add(node);
             }
@@ -51,23 +53,21 @@ namespace OutlookGTD.UI
 
         private void _conversationTtreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            
             string messageBody = e.Node.Tag as string;
             if (messageBody != null)
             {
                 _bodyTextBox.Text = messageBody;
             }
-            else
+            else 
             {
                 _bodyTextBox.Text = "";
             }
         }
-    }
 
-    public class MessageWrapper
-    {
-        public string Header { get; set; }
-        public string Body { get; set; }
+        public void ClearLinkedMessages()
+        {
+            _conversationTtreeView.Nodes.Clear();
+        }
     }
 }
 
