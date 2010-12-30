@@ -7,9 +7,9 @@ using Microsoft.Office.Interop.Outlook;
 using OutlookGTP.UI;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
-namespace OutlookGTDPlugin
+namespace OutlookGTD.Logic
 {
-    class TaskBodyParser
+    public class TaskBodyParser
     {
         private TaskItem _taskItem;
         private Folder _rootFolder;
@@ -84,6 +84,10 @@ namespace OutlookGTDPlugin
             return null;
         }
 
-
+        public static void GetFolderPathAndEntryId(string mailLinkLine, out string folderPath, out string entryId)
+        {
+            folderPath = string.Empty;
+            entryId = string.Empty;
+        }
     }
 }

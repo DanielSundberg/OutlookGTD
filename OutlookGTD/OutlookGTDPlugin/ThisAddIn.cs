@@ -7,8 +7,8 @@ using System.Text;
 using System.Xml.Linq;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
-using OutlookGTDPlugin;
 using OutlookGTP.UI;
+using OutlookGTD.Logic;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 

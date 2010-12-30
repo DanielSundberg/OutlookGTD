@@ -67,6 +67,7 @@ namespace OutlookGTD.UI
         public void ClearLinkedMessages()
         {
             _conversationTtreeView.Nodes.Clear();
+            _bodyTextBox.Text = "";
         }
     }
 }

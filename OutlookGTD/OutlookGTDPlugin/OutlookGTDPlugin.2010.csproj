@@ -223,7 +223,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="TaskBodyParser.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -236,6 +235,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OutlookGTD.Logic\OutlookGTD.Logic.csproj">
+      <Project>{34755F18-A290-4FE8-A185-DA5B9F985699}</Project>
+      <Name>OutlookGTD.Logic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OutlookGTP.UI\OutlookGTP.UI.csproj">
       <Project>{52AD7BE4-B813-4EE4-A32E-82FCFB8F25D0}</Project>
       <Name>OutlookGTP.UI</Name>
