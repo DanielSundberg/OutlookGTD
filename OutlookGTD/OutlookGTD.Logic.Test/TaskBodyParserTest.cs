@@ -12,11 +12,30 @@ namespace OutlookGTD.Logic.Test
     {
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestSimpleCorrectLine()
         {
+            //\\daniel.sundberg@tekis.se\ByggR\Driftsättningar\Enköping
+            //\\daniel.sundberg@tekis.se\Inbox
+
+            string line = @"MailLink=\\daniel.sundberg@tekis.se\Inbox:ENTRY_ID";
             string entryId;
             string folderPath;
-            TaskBodyParser.GetFolderPathAndEntryId("", out folderPath, out entryId);
+            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId);
+            Assert.AreEqual(@"\\daniel.sundberg@tekis.se\Inbox", folderPath);
+            Assert.AreEqual("ENTRY_ID", entryId);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TestLineWithoutEntryId()
+        {
+            //\\daniel.sundberg@tekis.se\ByggR\Driftsättningar\Enköping
+            //\\daniel.sundberg@tekis.se\Inbox
+
+            string line = @"MailLink=\\daniel.sundberg@tekis.se\Inbox";
+            string entryId;
+            string folderPath;
+            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId);
         }
     }
 }

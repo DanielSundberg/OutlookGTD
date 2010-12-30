@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Office.Interop.Outlook;
 using OutlookGTP.UI;
+using Exception = System.Exception;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
 namespace OutlookGTD.Logic
@@ -34,12 +35,12 @@ namespace OutlookGTD.Logic
                     string line = stringReader.ReadLine();
                     if (line.StartsWith("MailLink"))
                     {
-                        string data = line.Substring(9);
-                        var keys = data.Split(new[] { ':' });
-                        var entryId = keys[1];
-
-                        var folderPath = keys[0].Split(new char[] { '\\' });
-                        string folder = folderPath[folderPath.Length - 1];
+                        string folderPath, entryId;
+                        GetFolderPathAndEntryId(line, out folderPath, out entryId);
+                        
+                        var folders = folderPath.Split(new char[] { '\\' });
+                        
+                        string folder = folders[folders.Length - 1];
 
                         MailItem mailItem = GetMailItem(folder, entryId);
                         
@@ -86,8 +87,17 @@ namespace OutlookGTD.Logic
 
         public static void GetFolderPathAndEntryId(string mailLinkLine, out string folderPath, out string entryId)
         {
-            folderPath = string.Empty;
-            entryId = string.Empty;
+            string data = mailLinkLine.Substring(9);
+            var keys = data.Split(new[] { ':' });
+            try
+            {
+                folderPath = keys[0];
+                entryId = keys[1];
+            }
+            catch (IndexOutOfRangeException exception)
+            {
+                throw new FormatException("Mail link is of invalid format", exception);
+            }
         }
     }
 }
