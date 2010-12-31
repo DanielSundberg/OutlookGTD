@@ -67,7 +67,7 @@ namespace OutlookGTD.UI
                 _taskPaneControl.FolderPath = "";
                 _taskPaneControl.EntryId = "";
 
-                TaskBodyParser taskBodyParser = new TaskBodyParser(_taskItem, (Application.Session.DefaultStore.GetRootFolder() as Folder));
+                TaskBodyParser taskBodyParser = new TaskBodyParser(_taskItem, Application.Session.Stores as Stores);
                 var messages = taskBodyParser.ParseBody();
 
                 _taskPaneControl.SetLinkedMessages(messages);

@@ -13,17 +13,17 @@ namespace OutlookGTD.Logic
     public class TaskBodyParser
     {
         private TaskItem _taskItem;
+        private Stores _stores;
         private Folder _rootFolder;
 
-        public TaskBodyParser(TaskItem taskItem, Folder rootFolder)
+        public TaskBodyParser(TaskItem taskItem, Stores stores)
         {
             _taskItem = taskItem;
-            _rootFolder = rootFolder;
+            _stores = stores;
         }
 
         // Parse links of format
         // MailLink=\\daniel.sundberg@tekis.se\Inbox:<EntryId>
-        // TODO: get items from deeper folder levels
         public List<MessageWrapper> ParseBody()
         {
             List<MessageWrapper> messages = new List<MessageWrapper>();
@@ -37,13 +37,14 @@ namespace OutlookGTD.Logic
                     {
                         string folderPath, entryId;
                         GetFolderPathAndEntryId(line, out folderPath, out entryId);
-                        
-                        var folders = folderPath.Split(new char[] { '\\' });
-                        
-                        string folder = folders[folders.Length - 1];
 
-                        MailItem mailItem = GetMailItem(folder, entryId);
-                        
+                        string store;
+                        List<string> folders;
+
+                        ParseStoreAndFolders(folderPath, out store, out folders);
+
+                        MailItem mailItem = GetMailItem(store, folders, entryId);
+
                         MessageWrapper messageWrapper = new MessageWrapper();
                         messageWrapper.Subject = mailItem.Subject;
                         messageWrapper.Sender = mailItem.SenderName;
@@ -56,33 +57,62 @@ namespace OutlookGTD.Logic
             return messages;
         }
 
-        private MailItem GetMailItem(string folder, string entryId)
+        private MailItem GetMailItem(string store, List<string> folders, string entryId)
         {
-            Folders childFolders = _rootFolder.Folders;
-            if (childFolders.Count > 0)
+            Store currentStore = GetCurrentStore(store);
+            Folders childFolders = currentStore.GetRootFolder().Folders;
+
+            Folder currentFolder = null;
+            foreach (string folder in folders)
             {
-                Folder currentFolder = null;
-                foreach (Folder childFolder in childFolders)
-                {
-                    if (childFolder.Name == folder)
-                    {
-                        currentFolder = childFolder;
-                        break;
-                    }
-                }
+                currentFolder = FindFolder(childFolders, folder);
                 if (currentFolder != null)
                 {
-                    foreach (MailItem mailItem in currentFolder.Items)
+                    childFolders = currentFolder.Folders;
+                }
+            }
+            if (currentFolder != null)
+            {
+                foreach (MailItem mailItem in currentFolder.Items)
+                {
+                    if (mailItem.EntryID == entryId)
                     {
-                        if (mailItem.EntryID == entryId)
-                        {
-                            return mailItem;
-                        }
+                        return mailItem;
                     }
                 }
             }
-
             return null;
+        }
+
+        Folder FindFolder(Folders folders, string folderToFind)
+        {
+            Folder foundFolder = null;
+            foreach (Folder f in folders)
+            {
+                if (f.Name == folderToFind)
+                {
+                    foundFolder = f;
+                    break;
+                }
+            }
+            return foundFolder;
+        }
+
+        private Store GetCurrentStore(string store)
+        {
+            Store currentStore = null;
+            foreach (Store s in _stores)
+            {
+                if (s.DisplayName == store)
+                {
+                    currentStore = s;
+                }
+            }
+            if (currentStore == null)
+            {
+                throw new ArgumentException("Invalid store");
+            }
+            return currentStore;
         }
 
         public static void GetFolderPathAndEntryId(string mailLinkLine, out string folderPath, out string entryId)
@@ -100,13 +130,15 @@ namespace OutlookGTD.Logic
             }
         }
 
-        public static List<string> ParseFolders(string folderPath)
+        public static void ParseStoreAndFolders(string folderPath, out string store, out List<string> folders)
         {
-            List<string> folders = new List<string>();
-            var folderPathParts = folderPath.Split(new char[] { '\\' });
+            folders = new List<string>();
+            store = string.Empty;
 
+            var folderPathParts = folderPath.Split(new char[] { '\\' });
             if (folderPathParts.Length > 3)
             {
+                store = folderPathParts[2];
                 for (int i = 3; i < folderPathParts.Length; i++)
                 {
                     folders.Add(folderPathParts[i]);
@@ -116,8 +148,6 @@ namespace OutlookGTD.Logic
             {
                 throw new FormatException(@"Folder path is of invalid format, should be something like: \\your.name@domain.com\Inbox");
             }
-
-            return folders;
         }
     }
 }
