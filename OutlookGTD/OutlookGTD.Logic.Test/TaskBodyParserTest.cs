@@ -37,5 +37,43 @@ namespace OutlookGTD.Logic.Test
             string folderPath;
             TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId);
         }
+
+        [TestMethod]
+        public void TestFolderPathOneLevel()
+        {
+            //\\daniel.sundberg@tekis.se\ByggR\Driftsättningar\Enköping
+            //\\daniel.sundberg@tekis.se\Inbox
+
+            string folderPath = @"\\daniel.sundberg@tekis.se\Inbox";
+
+            var folders = TaskBodyParser.ParseFolders(folderPath);
+
+            Assert.AreEqual(1, folders.Count);
+            Assert.AreEqual("Inbox", folders[0]);
+        }
+
+        [TestMethod]
+        public void TestFolderPathThreeLevels()
+        {
+            //\\daniel.sundberg@tekis.se\ByggR\Driftsättningar\Enköping
+            //\\daniel.sundberg@tekis.se\Inbox
+
+            string folderPath = @"\\daniel.sundberg@tekis.se\ByggR\Driftsättningar\Enköping";
+
+            var folders = TaskBodyParser.ParseFolders(folderPath);
+
+            Assert.AreEqual(3, folders.Count);
+            Assert.AreEqual("ByggR", folders[0]);
+            Assert.AreEqual("Driftsättningar", folders[1]);
+            Assert.AreEqual("Enköping", folders[2]);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TestFolderPathOfInvalidFormatNoFolders()
+        {
+            string folderPath = @"\\daniel.sundberg@tekis.se";
+            var folders = TaskBodyParser.ParseFolders(folderPath);
+        }
     }
 }

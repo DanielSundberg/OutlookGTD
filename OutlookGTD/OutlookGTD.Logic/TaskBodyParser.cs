@@ -99,5 +99,25 @@ namespace OutlookGTD.Logic
                 throw new FormatException("Mail link is of invalid format", exception);
             }
         }
+
+        public static List<string> ParseFolders(string folderPath)
+        {
+            List<string> folders = new List<string>();
+            var folderPathParts = folderPath.Split(new char[] { '\\' });
+
+            if (folderPathParts.Length > 3)
+            {
+                for (int i = 3; i < folderPathParts.Length; i++)
+                {
+                    folders.Add(folderPathParts[i]);
+                }
+            }
+            else
+            {
+                throw new FormatException(@"Folder path is of invalid format, should be something like: \\your.name@domain.com\Inbox");
+            }
+
+            return folders;
+        }
     }
 }
