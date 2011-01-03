@@ -28,29 +28,32 @@ namespace OutlookGTD.Logic
         {
             List<MessageWrapper> messages = new List<MessageWrapper>();
 
-            using (StringReader stringReader = new StringReader(_taskItem.Body))
+            if (_taskItem.Body != null)
             {
-                while (stringReader.Peek() > 0)
+                using (StringReader stringReader = new StringReader(_taskItem.Body))
                 {
-                    string line = stringReader.ReadLine();
-                    if (line.StartsWith("MailLink"))
+                    while (stringReader.Peek() > 0)
                     {
-                        string folderPath, entryId;
-                        GetFolderPathAndEntryId(line, out folderPath, out entryId);
+                        string line = stringReader.ReadLine();
+                        if (line.StartsWith("MailLink"))
+                        {
+                            string folderPath, entryId;
+                            GetFolderPathAndEntryId(line, out folderPath, out entryId);
 
-                        string store;
-                        List<string> folders;
+                            string store;
+                            List<string> folders;
 
-                        ParseStoreAndFolders(folderPath, out store, out folders);
+                            ParseStoreAndFolders(folderPath, out store, out folders);
 
-                        MailItem mailItem = GetMailItem(store, folders, entryId);
+                            MailItem mailItem = GetMailItem(store, folders, entryId);
 
-                        MessageWrapper messageWrapper = new MessageWrapper();
-                        messageWrapper.Subject = mailItem.Subject;
-                        messageWrapper.Sender = mailItem.SenderName;
-                        messageWrapper.Body = mailItem.Body;
+                            MessageWrapper messageWrapper = new MessageWrapper();
+                            messageWrapper.Subject = mailItem.Subject;
+                            messageWrapper.Sender = mailItem.SenderName;
+                            messageWrapper.Body = mailItem.Body;
 
-                        messages.Add(messageWrapper);
+                            messages.Add(messageWrapper);
+                        }
                     }
                 }
             }
