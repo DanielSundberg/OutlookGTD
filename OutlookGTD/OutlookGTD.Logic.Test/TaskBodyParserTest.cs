@@ -83,5 +83,17 @@ namespace OutlookGTD.Logic.Test
             string store;
             TaskBodyParser.ParseStoreAndFolders(folderPath, out store, out folders);
         }
+
+        [TestMethod]
+        public void TestRemoveHyperLinksFromMail()
+        {
+            string mailBody = "From: HYPERLINK \"mailto:hi-sung.kim@tobii.com\"Hi-Sung Kim\n" +
+                "To: HYPERLINK \"mailto:per.neihoff@now.se\"per.neihoff@now.se ";
+            string expectedBody = "From: Hi-Sung Kim\n" +
+                "To: per.neihoff@now.se ";
+
+            string cleanBody = TaskBodyParser.RemoveHyperLinks(mailBody);
+            Assert.AreEqual(expectedBody, cleanBody);
+        }
     }
 }

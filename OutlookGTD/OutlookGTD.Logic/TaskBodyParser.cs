@@ -7,6 +7,7 @@ using Microsoft.Office.Interop.Outlook;
 using OutlookGTP.UI;
 using Exception = System.Exception;
 using Outlook = Microsoft.Office.Interop.Outlook;
+using System.Text.RegularExpressions;
 
 namespace OutlookGTD.Logic
 {
@@ -150,7 +151,12 @@ namespace OutlookGTD.Logic
             else
             {
                 throw new FormatException(@"Folder path is of invalid format, should be something like: \\your.name@domain.com\Inbox");
-            }
+            }   
+        }
+
+        public static string RemoveHyperLinks(string htmlBody)
+        {            
+            return Regex.Replace(htmlBody, "HYPERLINK \".*\"", "");
         }
     }
 }
