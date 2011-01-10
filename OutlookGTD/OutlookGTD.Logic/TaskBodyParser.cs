@@ -48,6 +48,8 @@ namespace OutlookGTD.Logic
 
                             MailItem mailItem = GetMailItem(store, folders, entryId);
 
+                            
+
                             MessageWrapper messageWrapper = new MessageWrapper();
                             messageWrapper.Subject = mailItem.Subject;
                             messageWrapper.Sender = mailItem.SenderName;
@@ -65,6 +67,8 @@ namespace OutlookGTD.Logic
         {
             Store currentStore = GetCurrentStore(store);
             Folders childFolders = currentStore.GetRootFolder().Folders;
+
+            MailItem mailItem2 = currentStore.Session.GetItemFromID(entryId, currentStore.StoreID);
 
             Folder currentFolder = null;
             foreach (string folder in folders)
