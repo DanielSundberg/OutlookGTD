@@ -11,6 +11,7 @@ using OutlookGTP.UI;
 using OutlookGTD.Logic;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
+using OutlookGTDPlugin;
 
 namespace OutlookGTD.UI
 {
@@ -30,6 +31,14 @@ namespace OutlookGTD.UI
             _customTaskPane.Visible = true;
 
             Application.ItemLoad += new Outlook.ApplicationEvents_11_ItemLoadEventHandler(Application_ItemLoad);
+            Application.ActiveExplorer().BeforeItemPaste += new ExplorerEvents_10_BeforeItemPasteEventHandler(ThisAddIn_BeforeItemPaste);            
+
+        }
+
+        private void ThisAddIn_BeforeItemPaste(ref object ClipboardContent, MAPIFolder Target, ref bool Cancel)
+
+        {
+            Console.WriteLine("Paste");
         }
 
         private void Application_ItemLoad(object Item)
@@ -78,12 +87,19 @@ namespace OutlookGTD.UI
                 _taskPaneControl.FolderPath = _mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
                 _taskPaneControl.EntryId = _mailItem.EntryID;
                 _taskPaneControl.ClearLinkedMessages();
+
+                
             }
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
 
+        }
+
+        protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
+        {
+            return new Ribbon1();
         }
 
         #region VSTO generated code
