@@ -47,13 +47,10 @@ namespace OutlookGTD.Logic
                             ParseStoreAndFolders(folderPath, out store, out folders);
 
                             MailItem mailItem = GetMailItem(store, folders, entryId);
-
-                            
-
                             MessageWrapper messageWrapper = new MessageWrapper();
                             messageWrapper.Subject = mailItem.Subject;
                             messageWrapper.Sender = mailItem.SenderName;
-                            messageWrapper.Body = mailItem.Body;
+                            messageWrapper.Body = TaskBodyParser.RemoveHyperLinks(mailItem.Body);
 
                             messages.Add(messageWrapper);
                         }
@@ -70,26 +67,28 @@ namespace OutlookGTD.Logic
 
             MailItem mailItem2 = currentStore.Session.GetItemFromID(entryId, currentStore.StoreID);
 
-            Folder currentFolder = null;
-            foreach (string folder in folders)
-            {
-                currentFolder = FindFolder(childFolders, folder);
-                if (currentFolder != null)
-                {
-                    childFolders = currentFolder.Folders;
-                }
-            }
-            if (currentFolder != null)
-            {
-                foreach (MailItem mailItem in currentFolder.Items)
-                {
-                    if (mailItem.EntryID == entryId)
-                    {
-                        return mailItem;
-                    }
-                }
-            }
-            return null;
+            return mailItem2;
+
+            //Folder currentFolder = null;
+            //foreach (string folder in folders)
+            //{
+            //    currentFolder = FindFolder(childFolders, folder);
+            //    if (currentFolder != null)
+            //    {
+            //        childFolders = currentFolder.Folders;
+            //    }
+            //}
+            //if (currentFolder != null)
+            //{
+            //    foreach (MailItem mailItem in currentFolder.Items)
+            //    {
+            //        if (mailItem.EntryID == entryId)
+            //        {
+            //            return mailItem;
+            //        }
+            //    }
+            //}
+            //return null;
         }
 
         Folder FindFolder(Folders folders, string folderToFind)
