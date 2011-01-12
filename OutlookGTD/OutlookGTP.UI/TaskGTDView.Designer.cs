@@ -43,26 +43,29 @@
             // 
             this._subjectTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this._subjectTextBox.Location = new System.Drawing.Point(15, 40);
+            this._subjectTextBox.Location = new System.Drawing.Point(11, 32);
+            this._subjectTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._subjectTextBox.Name = "_subjectTextBox";
-            this._subjectTextBox.Size = new System.Drawing.Size(117, 22);
+            this._subjectTextBox.Size = new System.Drawing.Size(89, 20);
             this._subjectTextBox.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 11);
+            this.label1.Location = new System.Drawing.Point(9, 9);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 17);
+            this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Subject:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 76);
+            this.label2.Location = new System.Drawing.Point(9, 62);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 17);
+            this.label2.Size = new System.Drawing.Size(61, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "FolderPath:";
             // 
@@ -70,35 +73,39 @@
             // 
             this._folderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this._folderTextBox.Location = new System.Drawing.Point(15, 96);
+            this._folderTextBox.Location = new System.Drawing.Point(11, 78);
+            this._folderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._folderTextBox.Name = "_folderTextBox";
-            this._folderTextBox.Size = new System.Drawing.Size(117, 22);
+            this._folderTextBox.Size = new System.Drawing.Size(89, 20);
             this._folderTextBox.TabIndex = 3;
             // 
             // _entryIdTextBox
             // 
             this._entryIdTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this._entryIdTextBox.Location = new System.Drawing.Point(15, 153);
+            this._entryIdTextBox.Location = new System.Drawing.Point(11, 124);
+            this._entryIdTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._entryIdTextBox.Name = "_entryIdTextBox";
-            this._entryIdTextBox.Size = new System.Drawing.Size(117, 22);
+            this._entryIdTextBox.Size = new System.Drawing.Size(89, 20);
             this._entryIdTextBox.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 133);
+            this.label3.Location = new System.Drawing.Point(9, 108);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 17);
+            this.label3.Size = new System.Drawing.Size(45, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Entry id:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 206);
+            this.label4.Location = new System.Drawing.Point(9, 167);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(46, 17);
+            this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Store:";
             // 
@@ -106,9 +113,10 @@
             // 
             this._conversationTtreeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this._conversationTtreeView.Location = new System.Drawing.Point(15, 227);
+            this._conversationTtreeView.Location = new System.Drawing.Point(11, 184);
+            this._conversationTtreeView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._conversationTtreeView.Name = "_conversationTtreeView";
-            this._conversationTtreeView.Size = new System.Drawing.Size(121, 113);
+            this._conversationTtreeView.Size = new System.Drawing.Size(92, 93);
             this._conversationTtreeView.TabIndex = 7;
             this._conversationTtreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._conversationTtreeView_NodeMouseClick);
             // 
@@ -117,15 +125,17 @@
             this._bodyTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this._bodyTextBox.Location = new System.Drawing.Point(15, 347);
+            this._bodyTextBox.Location = new System.Drawing.Point(11, 282);
+            this._bodyTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._bodyTextBox.Multiline = true;
             this._bodyTextBox.Name = "_bodyTextBox";
-            this._bodyTextBox.Size = new System.Drawing.Size(121, 110);
+            this._bodyTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this._bodyTextBox.Size = new System.Drawing.Size(92, 90);
             this._bodyTextBox.TabIndex = 8;
             // 
             // TaskGTDView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this._bodyTextBox);
             this.Controls.Add(this._conversationTtreeView);
@@ -136,8 +146,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this._subjectTextBox);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "TaskGTDView";
-            this.Size = new System.Drawing.Size(150, 460);
+            this.Size = new System.Drawing.Size(112, 374);
             this.ResumeLayout(false);
             this.PerformLayout();
 
