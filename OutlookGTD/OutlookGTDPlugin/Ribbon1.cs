@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 using System.Diagnostics;
 using Microsoft.Office.Core;
@@ -52,8 +53,13 @@ namespace OutlookGTDPlugin
         //Create callback methods here. For more information about adding callback methods, select the Ribbon XML item in Solution Explorer and then press F1
 
         public void CreateTaskClicked(IRibbonControl control)
-        {           
-            Debug.WriteLine("test");
+        {
+            //MailItem item = control.;
+            //var application = MefContainer.GetExportedValue<Application>();
+            //var explorer = application.ActiveExplorer();
+            //var selection = explorer.Selection.Cast<MailItem>();
+            //var mailitem = selection.ElementAt(0);
+            //var folder = mailitem.Parent as Folder;
         }
 
         public void Ribbon1_Load(Office.IRibbonUI ribbonUI)
