@@ -60,6 +60,19 @@ namespace OutlookGTDPlugin
             //var selection = explorer.Selection.Cast<MailItem>();
             //var mailitem = selection.ElementAt(0);
             //var folder = mailitem.Parent as Folder;
+
+            
+            // Create guid for mail here
+            //Guid guid = new Guid();
+            //_mailItem.UserProperties.Add("OutlookGTD", OlUserPropertyType.olText).Value = guid.ToString();
+
+            //UserProperty property = null;
+            //property = _mailItem.UserProperties.Find("OutlookGTD");
+            //if (property != null)
+            //{
+            //    string str = property.Value.ToString();
+            //}
+
         }
 
         public void Ribbon1_Load(Office.IRibbonUI ribbonUI)
