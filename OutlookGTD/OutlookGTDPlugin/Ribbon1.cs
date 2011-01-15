@@ -71,10 +71,8 @@ namespace OutlookGTDPlugin
             // TODO: display create task form here
             TaskItem taskItem = _application.CreateItem(OlItemType.olTaskItem);
             taskItem.Subject = mailItem.Subject;
-            taskItem.Body = BuildMailItemLink(mailItem, folder, guid);
-            taskItem.Save();
-
-            MessageBox.Show("Task saved: " + taskItem.Subject);
+            taskItem.Body = @"\n\n" + BuildMailItemLink(mailItem, folder, guid);
+            taskItem.Display();
         }
 
         private string BuildMailItemLink(MailItem mailItem, Folder folder, string guid)
@@ -122,9 +120,66 @@ namespace OutlookGTDPlugin
             //{
             //    string str = property.Value.ToString();
             //}
-            MessageBox.Show("Link to task clicked");
+
+            List<TaskItem> taskList = FindAllTasks(_application.Session.Stores as Stores);
+            using (TaskListView taskListView = new TaskListView())
+            {
+                taskListView.SetItems(taskList);
+                if (taskListView.ShowDialog() == DialogResult.OK)
+                {
+                    TaskItem taskItem = taskListView.GetSelectedTask();
+                    if (taskItem != null)
+                    {
+                        var selection = _application.ActiveExplorer().Selection.Cast<MailItem>();
+                        var mailItem = selection.ElementAt(0);
+                        var folder = mailItem.Parent as Folder;
+
+                        // Create guid for mail here
+                        string guid = GetNewOrExistingGuid(mailItem);
+
+
+
+                        // Append mail link to task
+                        StringBuilder stringBuilder = new StringBuilder(taskItem.Body);
+                        stringBuilder.AppendLine();
+                        stringBuilder.AppendLine(BuildMailItemLink(mailItem, folder, guid));
+                        taskItem.Body = stringBuilder.ToString();
+                        taskItem.Display();
+                    }
+                }
+            }
+            
         }
 
+        public List<TaskItem> FindAllTasks(Stores stores)
+        {
+            List<TaskItem> taskList = new List<TaskItem>();
+            foreach (Store store in stores)
+            {
+                FindTasksInStore(taskList, store);
+            }
+            return taskList;
+        }
+
+        private void FindTasksInStore(List<TaskItem> taskList, Store store)
+        {
+            FindTasksInFolder(taskList, store.GetRootFolder() as Folder);
+        }
+
+        private void FindTasksInFolder(List<TaskItem> taskList, Folder folder)
+        {
+            if (folder.DefaultItemType == OlItemType.olTaskItem)
+            {
+                foreach (TaskItem taskItem in folder.Items)
+                {
+                    taskList.Add(taskItem);
+                }
+            }
+            foreach (Folder f in folder.Folders)
+            {
+                FindTasksInFolder(taskList, f);
+            }
+        }
 
         public void Ribbon1_Load(Office.IRibbonUI ribbonUI)
         {

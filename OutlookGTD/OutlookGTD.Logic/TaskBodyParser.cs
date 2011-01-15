@@ -18,6 +18,11 @@ namespace OutlookGTD.Logic
         private Stores _stores;
         private Folder _rootFolder;
 
+        public TaskBodyParser(Stores stores)
+        {
+            _stores = stores;
+        }
+
         public TaskBodyParser(TaskItem taskItem, Stores stores)
         {
             _taskItem = taskItem;
@@ -203,35 +208,6 @@ namespace OutlookGTD.Logic
             return null;
         }
 
-        public List<TaskItem> FindAllTasks()
-        {
-            List<TaskItem> taskList = new List<TaskItem>();
-            foreach (Store store in _stores)
-            {
-                FindTasksInStore(taskList, store);
-            }
-            return taskList;
-        }
-
-        private void FindTasksInStore(List<TaskItem> taskList, Store store)
-        {
-            FindTasksInFolder(taskList, store.GetRootFolder() as Folder);
-        }
-
-        private void FindTasksInFolder(List<TaskItem> taskList, Folder folder)
-        {
-            if (folder.DefaultItemType == OlItemType.olTaskItem)
-            {
-                foreach (TaskItem taskItem in folder.Items)
-                {
-                    taskList.Add(taskItem);
-                }
-            }
-            foreach (Folder f in folder.Folders)
-            {
-                FindTasksInFolder(taskList, f);
-            }
-        }
 
 
         Folder FindFolder(Folders folders, string folderToFind)

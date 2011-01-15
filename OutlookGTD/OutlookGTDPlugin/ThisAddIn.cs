@@ -33,7 +33,25 @@ namespace OutlookGTD.UI
 
             Application.ItemLoad += new Outlook.ApplicationEvents_11_ItemLoadEventHandler(Application_ItemLoad);
 
+            //foreach (Explorer explorer in Application.Explorers)
+            //{
+            //    Debug.WriteLine(explorer.Caption + ":" + (explorer.Class == OlObjectClass.olMail).ToString());
+            //    explorer.SelectionChange += new ExplorerEvents_10_SelectionChangeEventHandler(explorer_SelectionChange);
+            //}
+            //Application.Explorers.NewExplorer += new ExplorersEvents_NewExplorerEventHandler(Explorers_NewExplorer);
+
             _ribbon1.SetApplication(Application);
+        }
+
+        void explorer_SelectionChange()
+        {
+            //Application.ActiveExplorer().Selection.
+            Debug.WriteLine("Selection changed");
+        }
+
+        void Explorers_NewExplorer(Explorer Explorer)
+        {
+            Debug.WriteLine("New explorer: " + Explorer.Caption);
         }
 
         private void Application_ItemLoad(object Item)
