@@ -14,6 +14,9 @@
         <button id="CreateTaskFromMailItem"
             label="Create task..."
             onAction="CreateTaskClicked"/>
+        <button id="LinkToTask"
+            label="Link to task..."
+            onAction="LinkToTaskClicked"/>
       </contextMenu>
     </contextMenus>
 </customUI>

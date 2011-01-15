@@ -17,12 +17,14 @@ namespace OutlookGTD.Logic.Test
             //\\daniel.sundberg@tekis.se\ByggR\Driftsättningar\Enköping
             //\\daniel.sundberg@tekis.se\Inbox
 
-            string line = @"MailLink=\\daniel.sundberg@tekis.se\Inbox:ENTRY_ID";
+            string line = @"MailLink=\\daniel.sundberg@tekis.se\Inbox:ENTRY_ID:GUID-GUID";
             string entryId;
             string folderPath;
-            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId);
+            string guid;
+            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid);
             Assert.AreEqual(@"\\daniel.sundberg@tekis.se\Inbox", folderPath);
             Assert.AreEqual("ENTRY_ID", entryId);
+            Assert.AreEqual("GUID-GUID", guid);
         }
 
         [TestMethod]
@@ -35,7 +37,8 @@ namespace OutlookGTD.Logic.Test
             string line = @"MailLink=\\daniel.sundberg@tekis.se\Inbox";
             string entryId;
             string folderPath;
-            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId);
+            string guid;
+            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid);
         }
 
         [TestMethod]

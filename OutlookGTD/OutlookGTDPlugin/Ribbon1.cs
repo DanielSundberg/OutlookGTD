@@ -9,6 +9,8 @@ using Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 using System.Diagnostics;
 using Microsoft.Office.Core;
+using System.Windows.Forms;
+using OutlookGTD.Logic;
 
 // TODO:  Follow these steps to enable the Ribbon (XML) item:
 
@@ -35,9 +37,15 @@ namespace OutlookGTDPlugin
     public class Ribbon1 : Office.IRibbonExtensibility
     {
         private Office.IRibbonUI ribbon;
+        private Microsoft.Office.Interop.Outlook.Application _application;
 
         public Ribbon1()
         {
+        }
+
+        public void SetApplication(Microsoft.Office.Interop.Outlook.Application application)
+        {
+            _application = application;
         }
 
         #region IRibbonExtensibility Members
@@ -50,9 +58,51 @@ namespace OutlookGTDPlugin
         #endregion
 
         #region Ribbon Callbacks
-        //Create callback methods here. For more information about adding callback methods, select the Ribbon XML item in Solution Explorer and then press F1
-
         public void CreateTaskClicked(IRibbonControl control)
+        {            
+            var selection = _application.ActiveExplorer().Selection.Cast<MailItem>();
+            var mailItem = selection.ElementAt(0);
+            
+            var folder = mailItem.Parent as Folder;
+
+            // Create guid for mail here
+            string guid = GetNewOrExistingGuid(mailItem);
+
+            // TODO: display create task form here
+            TaskItem taskItem = _application.CreateItem(OlItemType.olTaskItem);
+            taskItem.Subject = mailItem.Subject;
+            taskItem.Body = BuildMailItemLink(mailItem, folder, guid);
+            taskItem.Save();
+
+            MessageBox.Show("Task saved: " + taskItem.Subject);
+        }
+
+        private string BuildMailItemLink(MailItem mailItem, Folder folder, string guid)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("MailLink=");
+            stringBuilder.Append(folder.FolderPath);
+            stringBuilder.Append(":");
+            stringBuilder.Append(mailItem.EntryID);
+            stringBuilder.Append(":");
+            stringBuilder.Append(guid);
+            return stringBuilder.ToString();
+        }
+
+        private static string GetNewOrExistingGuid(MailItem mailItem)
+        {
+            UserProperty property = Utils.GetGtdGuidFromMailItem(mailItem);
+            if (property != null)
+            {
+                return property.Value.ToString();
+            }
+
+            Guid guid = Guid.NewGuid();
+            mailItem.UserProperties.Add(Utils.GTD_GUID, OlUserPropertyType.olText).Value = guid.ToString();
+            return guid.ToString();
+        }
+
+        public void LinkToTaskClicked(IRibbonControl control)
         {
             //MailItem item = control.;
             //var application = MefContainer.GetExportedValue<Application>();
@@ -61,7 +111,7 @@ namespace OutlookGTDPlugin
             //var mailitem = selection.ElementAt(0);
             //var folder = mailitem.Parent as Folder;
 
-            
+
             // Create guid for mail here
             //Guid guid = new Guid();
             //_mailItem.UserProperties.Add("OutlookGTD", OlUserPropertyType.olText).Value = guid.ToString();
@@ -72,8 +122,9 @@ namespace OutlookGTDPlugin
             //{
             //    string str = property.Value.ToString();
             //}
-
+            MessageBox.Show("Link to task clicked");
         }
+
 
         public void Ribbon1_Load(Office.IRibbonUI ribbonUI)
         {

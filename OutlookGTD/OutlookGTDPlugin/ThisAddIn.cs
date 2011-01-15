@@ -21,6 +21,7 @@ namespace OutlookGTD.UI
         private MailItem _mailItem;
         private TaskGTDView _taskPaneControl;
         private Microsoft.Office.Tools.CustomTaskPane _customTaskPane;
+        private Ribbon1 _ribbon1;
         
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
@@ -31,14 +32,8 @@ namespace OutlookGTD.UI
             _customTaskPane.Visible = true;
 
             Application.ItemLoad += new Outlook.ApplicationEvents_11_ItemLoadEventHandler(Application_ItemLoad);
-            Application.ActiveExplorer().BeforeItemPaste += new ExplorerEvents_10_BeforeItemPasteEventHandler(ThisAddIn_BeforeItemPaste);            
 
-        }
-
-        private void ThisAddIn_BeforeItemPaste(ref object ClipboardContent, MAPIFolder Target, ref bool Cancel)
-
-        {
-            Console.WriteLine("Paste");
+            _ribbon1.SetApplication(Application);
         }
 
         private void Application_ItemLoad(object Item)
@@ -85,7 +80,18 @@ namespace OutlookGTD.UI
             {
                 _taskPaneControl.Subject = _mailItem.Subject;
                 _taskPaneControl.FolderPath = _mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
-                _taskPaneControl.EntryId = _mailItem.EntryID;
+
+                UserProperty userProperty = Utils.GetGtdGuidFromMailItem(_mailItem);
+                if (userProperty != null)
+                {
+                    _taskPaneControl.EntryId = userProperty.Value.ToString();
+                }
+                else
+                {
+                    _taskPaneControl.EntryId = _mailItem.EntryID;
+                }
+                
+                //_taskPaneControl.EntryId = guid;
                 _taskPaneControl.ClearLinkedMessages();
 
                 
@@ -99,7 +105,8 @@ namespace OutlookGTD.UI
 
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
-            return new Ribbon1();
+            _ribbon1 = new Ribbon1();
+            return _ribbon1;
         }
 
         #region VSTO generated code
