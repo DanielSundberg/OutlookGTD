@@ -68,11 +68,51 @@ namespace OutlookGTDPlugin
             // Create guid for mail here
             string guid = GetNewOrExistingGuid(mailItem);
 
-            // TODO: display create task form here
             TaskItem taskItem = _application.CreateItem(OlItemType.olTaskItem);
             taskItem.Subject = mailItem.Subject;
-            taskItem.Body = @"\n\n" + BuildMailItemLink(mailItem, folder, guid);
+            taskItem.Body = "\n\n" + BuildMailItemLink(mailItem, folder, guid);
             taskItem.Display();
+        }
+
+
+        public void LinkToTaskClicked(IRibbonControl control)
+        {
+            List<TaskItem> taskList = FindAllTasks(_application.Session.Stores as Stores);
+            using (TaskListView taskListView = new TaskListView())
+            {
+                taskListView.SetItems(taskList);
+                if (taskListView.ShowDialog() == DialogResult.OK)
+                {
+                    TaskItem taskItem = taskListView.GetSelectedTask();
+                    if (taskItem != null)
+                    {
+                        var selection = _application.ActiveExplorer().Selection.Cast<MailItem>();
+                        var mailItem = selection.ElementAt(0);
+                        var folder = mailItem.Parent as Folder;
+
+                        // Create guid for mail here
+                        string guid = GetNewOrExistingGuid(mailItem);
+
+                        // Append mail link to task
+                        StringBuilder stringBuilder = new StringBuilder(taskItem.Body);
+                        stringBuilder.AppendLine();
+                        stringBuilder.AppendLine(BuildMailItemLink(mailItem, folder, guid));
+                        taskItem.Body = stringBuilder.ToString();
+                        taskItem.Display();
+                    }
+                }
+            }
+            
+        }
+
+        public List<TaskItem> FindAllTasks(Stores stores)
+        {
+            List<TaskItem> taskList = new List<TaskItem>();
+            foreach (Store store in stores)
+            {
+                FindTasksInStore(taskList, store);
+            }
+            return taskList;
         }
 
         private string BuildMailItemLink(MailItem mailItem, Folder folder, string guid)
@@ -100,66 +140,6 @@ namespace OutlookGTDPlugin
             return guid.ToString();
         }
 
-        public void LinkToTaskClicked(IRibbonControl control)
-        {
-            //MailItem item = control.;
-            //var application = MefContainer.GetExportedValue<Application>();
-            //var explorer = application.ActiveExplorer();
-            //var selection = explorer.Selection.Cast<MailItem>();
-            //var mailitem = selection.ElementAt(0);
-            //var folder = mailitem.Parent as Folder;
-
-
-            // Create guid for mail here
-            //Guid guid = new Guid();
-            //_mailItem.UserProperties.Add("OutlookGTD", OlUserPropertyType.olText).Value = guid.ToString();
-
-            //UserProperty property = null;
-            //property = _mailItem.UserProperties.Find("OutlookGTD");
-            //if (property != null)
-            //{
-            //    string str = property.Value.ToString();
-            //}
-
-            List<TaskItem> taskList = FindAllTasks(_application.Session.Stores as Stores);
-            using (TaskListView taskListView = new TaskListView())
-            {
-                taskListView.SetItems(taskList);
-                if (taskListView.ShowDialog() == DialogResult.OK)
-                {
-                    TaskItem taskItem = taskListView.GetSelectedTask();
-                    if (taskItem != null)
-                    {
-                        var selection = _application.ActiveExplorer().Selection.Cast<MailItem>();
-                        var mailItem = selection.ElementAt(0);
-                        var folder = mailItem.Parent as Folder;
-
-                        // Create guid for mail here
-                        string guid = GetNewOrExistingGuid(mailItem);
-
-
-
-                        // Append mail link to task
-                        StringBuilder stringBuilder = new StringBuilder(taskItem.Body);
-                        stringBuilder.AppendLine();
-                        stringBuilder.AppendLine(BuildMailItemLink(mailItem, folder, guid));
-                        taskItem.Body = stringBuilder.ToString();
-                        taskItem.Display();
-                    }
-                }
-            }
-            
-        }
-
-        public List<TaskItem> FindAllTasks(Stores stores)
-        {
-            List<TaskItem> taskList = new List<TaskItem>();
-            foreach (Store store in stores)
-            {
-                FindTasksInStore(taskList, store);
-            }
-            return taskList;
-        }
 
         private void FindTasksInStore(List<TaskItem> taskList, Store store)
         {

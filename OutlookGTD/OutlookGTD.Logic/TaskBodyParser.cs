@@ -191,6 +191,7 @@ namespace OutlookGTD.Logic
 
             if (folder.DefaultItemType == OlItemType.olMailItem)
             {
+                if (folder.Name == "Deleted Items") return null;
                 foreach (MailItem item in folder.Items)
                 {
                     UserProperty userProperty = Utils.GetGtdGuidFromMailItem(item);
