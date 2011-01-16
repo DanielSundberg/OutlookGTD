@@ -29,8 +29,6 @@ namespace OutlookGTD.Logic
             _stores = stores;
         }
 
-        // Parse links of format
-        // MailLink=\\daniel.sundberg@tekis.se\Inbox:<EntryId>
         public List<MessageWrapper> ParseBody()
         {
             List<MessageWrapper> messages = new List<MessageWrapper>();
@@ -59,7 +57,7 @@ namespace OutlookGTD.Logic
 
                             if (itemHasMoved)
                             {
-                                // Update task mail link
+                                // TODO: Update task mail link
                             }
                             if (mailItem != null)
                             {
@@ -99,6 +97,10 @@ namespace OutlookGTD.Logic
                 MailItem mailItem2 = currentStore.Session.GetItemFromID(entryId, currentStore.StoreID);
                 if (mailItem2 != null)
                 {
+                    // TODO: check if the user property is set, if not, set it
+                    // IMAP messages will drop user properties when copied to another folder
+                    // POP3 and exchange messages will keep user properties
+                    // IMAP messages will however keep user properties when moved to a local folder
                     itemHasMoved = false;
                     return mailItem2;
                 }
@@ -115,6 +117,8 @@ namespace OutlookGTD.Logic
             // Then search the current store, if we're on exchange the item gets a new EntryId when moved 
             // between folders, this is probably the most likely case...will however slow it down for 
             // POP3 and IMAP users....
+            // IMAP messages will be found by GetItemFromId above unless it has been moved to local storage
+            // POP3 I don't know at the moment
             bool found;
             MailItem mailItem = GetMailItemFromStore(guid, currentStore, out found, out newFolderPath);
             if (found)
