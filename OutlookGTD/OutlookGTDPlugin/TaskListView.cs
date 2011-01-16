@@ -22,10 +22,27 @@ namespace OutlookGTDPlugin
         {
             foreach (TaskItem item in taskList)
             {
-                ListViewItem listViewItem = new ListViewItem();
-                listViewItem.Text = item.Subject;
-                listViewItem.Tag = item;
-                _listView.Items.Add(listViewItem);
+                if ((item.Status == OlTaskStatus.olTaskInProgress) ||
+                    (item.Status == OlTaskStatus.olTaskNotStarted) ||
+                    (item.Status == OlTaskStatus.olTaskWaiting))
+                {
+
+                    ListViewItem listViewItem = new ListViewItem(new string[] { item.Subject, GetDueDate(item) });
+                    listViewItem.Tag = item;
+                    _listView.Items.Add(listViewItem);
+                }
+            }
+        }
+
+        private static string GetDueDate(TaskItem item)
+        {
+            if (item.DueDate.Date.Equals(new DateTime(4501,1,1)))
+            {
+                return "No date set";
+            }
+            else
+            {
+                return item.DueDate.ToShortDateString();
             }
         }
 

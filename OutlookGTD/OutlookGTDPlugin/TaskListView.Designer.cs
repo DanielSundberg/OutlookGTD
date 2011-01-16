@@ -29,14 +29,16 @@
         private void InitializeComponent()
         {
             this._listView = new System.Windows.Forms.ListView();
-            this._okButton = new System.Windows.Forms.Button();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._okButton = new System.Windows.Forms.Button();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // _listView
             // 
             this._listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
+            this.columnHeader1,
+            this.columnHeader2});
             this._listView.Location = new System.Drawing.Point(12, 12);
             this._listView.Name = "_listView";
             this._listView.Size = new System.Drawing.Size(407, 403);
@@ -44,6 +46,11 @@
             this._listView.UseCompatibleStateImageBehavior = false;
             this._listView.View = System.Windows.Forms.View.Details;
             this._listView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this._listView_MouseDoubleClick);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Subject";
+            this.columnHeader1.Width = 279;
             // 
             // _okButton
             // 
@@ -55,10 +62,10 @@
             this._okButton.UseVisualStyleBackColor = true;
             this._okButton.Click += new System.EventHandler(this._okButton_Click);
             // 
-            // columnHeader1
+            // columnHeader2
             // 
-            this.columnHeader1.Text = "Subject";
-            this.columnHeader1.Width = 329;
+            this.columnHeader2.Text = "Due date";
+            this.columnHeader2.Width = 123;
             // 
             // TaskListView
             // 
@@ -78,5 +85,6 @@
         private System.Windows.Forms.ListView _listView;
         private System.Windows.Forms.Button _okButton;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
     }
 }
