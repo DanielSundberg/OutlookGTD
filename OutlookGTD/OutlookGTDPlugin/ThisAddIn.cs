@@ -22,7 +22,7 @@ namespace OutlookGTD.UI
         private TaskGTDView _taskPaneControl;
         private Microsoft.Office.Tools.CustomTaskPane _customTaskPane;
         private Ribbon1 _ribbon1;
-        
+        private Explorer _activeExplorer;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
@@ -31,89 +31,61 @@ namespace OutlookGTD.UI
             _customTaskPane = this.CustomTaskPanes.Add(_taskPaneControl, "Task info");
             _customTaskPane.Visible = true;
 
-            Application.ItemLoad += new Outlook.ApplicationEvents_11_ItemLoadEventHandler(Application_ItemLoad);
-
-            //foreach (Explorer explorer in Application.Explorers)
-            //{
-            //    Debug.WriteLine(explorer.Caption + ":" + (explorer.Class == OlObjectClass.olMail).ToString());
-            //    explorer.SelectionChange += new ExplorerEvents_10_SelectionChangeEventHandler(explorer_SelectionChange);
-            //}
-            //Application.Explorers.NewExplorer += new ExplorersEvents_NewExplorerEventHandler(Explorers_NewExplorer);
+            _activeExplorer = Application.ActiveExplorer();
+            _activeExplorer.SelectionChange += new ExplorerEvents_10_SelectionChangeEventHandler(ThisAddIn_SelectionChange);
 
             _ribbon1.SetApplication(Application);
+        }
+
+        void explorer2_SelectionChange()
+        {
+            Debug.WriteLine("Test");
+        }
+
+        private void ThisAddIn_SelectionChange()
+        {
+            if (Application.ActiveExplorer().Selection.Count > 0)
+            {
+                var item = Application.ActiveExplorer().Selection[1];
+
+                if (item is TaskItem)
+                {
+                    TaskItem taskItem = item as TaskItem;
+                    _taskPaneControl.Subject = taskItem.Subject;
+                    _taskPaneControl.FolderPath = "";
+                    _taskPaneControl.EntryId = "";
+
+                    TaskBodyParser taskBodyParser = new TaskBodyParser(taskItem, Application.Session.Stores as Stores);
+                    var messages = taskBodyParser.ParseBody();
+
+                    _taskPaneControl.SetLinkedMessages(messages);
+                }
+                else if (item is MailItem)
+                {
+                    MailItem mailItem = item as MailItem;
+                    _taskPaneControl.Subject = mailItem.Subject;
+                    _taskPaneControl.FolderPath = mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
+
+                    UserProperty userProperty = Utils.GetGtdGuidFromMailItem(mailItem);
+                    if (userProperty != null)
+                    {
+                        _taskPaneControl.EntryId = userProperty.Value.ToString();
+                    }
+                    else
+                    {
+                        _taskPaneControl.EntryId = mailItem.EntryID;
+                    }
+
+                    //_taskPaneControl.EntryId = guid;
+                    _taskPaneControl.ClearLinkedMessages();
+                }
+            }
         }
 
         void explorer_SelectionChange()
         {
             //Application.ActiveExplorer().Selection.
             Debug.WriteLine("Selection changed");
-        }
-
-        void Explorers_NewExplorer(Explorer Explorer)
-        {
-            Debug.WriteLine("New explorer: " + Explorer.Caption);
-        }
-
-        private void Application_ItemLoad(object Item)
-        {
-            _taskItem = null;
-            _mailItem = null;
-            if (Item is Outlook.TaskItem)
-            {
-
-                var taskItem = Item as Outlook.TaskItem;
-                _taskItem = taskItem;
-                taskItem.Read += new Outlook.ItemEvents_10_ReadEventHandler(taskItem_Read);
-
-                // Open side bar
-                //_customTaskPane.Visible = true;
-            }
-            else if (Item is MailItem)
-            {
-                var mailItem = Item as MailItem;
-                _mailItem = mailItem;
-                mailItem.Read += new ItemEvents_10_ReadEventHandler(taskItem_Read);
-            }
-            else
-            {
-                // Hide side bar
-                //_customTaskPane.Visible = false;
-            }
-        }
-      
-        private void taskItem_Read()
-        {
-            if (_taskItem != null)
-            {
-                _taskPaneControl.Subject = _taskItem.Subject;
-                _taskPaneControl.FolderPath = "";
-                _taskPaneControl.EntryId = "";
-
-                TaskBodyParser taskBodyParser = new TaskBodyParser(_taskItem, Application.Session.Stores as Stores);
-                var messages = taskBodyParser.ParseBody();
-
-                _taskPaneControl.SetLinkedMessages(messages);
-            }
-            else if (_mailItem != null)
-            {
-                _taskPaneControl.Subject = _mailItem.Subject;
-                _taskPaneControl.FolderPath = _mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
-
-                UserProperty userProperty = Utils.GetGtdGuidFromMailItem(_mailItem);
-                if (userProperty != null)
-                {
-                    _taskPaneControl.EntryId = userProperty.Value.ToString();
-                }
-                else
-                {
-                    _taskPaneControl.EntryId = _mailItem.EntryID;
-                }
-                
-                //_taskPaneControl.EntryId = guid;
-                _taskPaneControl.ClearLinkedMessages();
-
-                
-            }
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
