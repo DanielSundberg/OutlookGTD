@@ -12,25 +12,6 @@ using Microsoft.Office.Core;
 using System.Windows.Forms;
 using OutlookGTD.Logic;
 
-// TODO:  Follow these steps to enable the Ribbon (XML) item:
-
-// 1: Copy the following code block into the ThisAddin, ThisWorkbook, or ThisDocument class.
-
-//  protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
-//  {
-//      return new Ribbon1();
-//  }
-
-// 2. Create callback methods in the "Ribbon Callbacks" region of this class to handle user
-//    actions, such as clicking a button. Note: if you have exported this Ribbon from the Ribbon designer,
-//    move your code from the event handlers to the callback methods and modify the code to work with the
-//    Ribbon extensibility (RibbonX) programming model.
-
-// 3. Assign attributes to the control tags in the Ribbon XML file to identify the appropriate callback methods in your code.  
-
-// For more information, see the Ribbon XML documentation in the Visual Studio Tools for Office Help.
-
-
 namespace OutlookGTDPlugin
 {
     [ComVisible(true)]
@@ -70,7 +51,7 @@ namespace OutlookGTDPlugin
 
             TaskItem taskItem = _application.CreateItem(OlItemType.olTaskItem);
             taskItem.Subject = mailItem.Subject;
-            taskItem.Body = "\n\n" + BuildMailItemLink(mailItem, folder, guid);
+            taskItem.Body = "\n\n" + Utils.BuildMailItemLink(mailItem, folder, guid);
             taskItem.Display();
         }
 
@@ -96,7 +77,7 @@ namespace OutlookGTDPlugin
                         // Append mail link to task
                         StringBuilder stringBuilder = new StringBuilder(taskItem.Body);
                         stringBuilder.AppendLine();
-                        stringBuilder.AppendLine(BuildMailItemLink(mailItem, folder, guid));
+                        stringBuilder.AppendLine(Utils.BuildMailItemLink(mailItem, folder, guid));
                         taskItem.Body = stringBuilder.ToString();
                         taskItem.Display();
                     }
@@ -113,18 +94,6 @@ namespace OutlookGTDPlugin
                 FindTasksInStore(taskList, store);
             }
             return taskList;
-        }
-
-        private string BuildMailItemLink(MailItem mailItem, Folder folder, string guid)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("MailLink=");
-            stringBuilder.Append(folder.FolderPath);
-            stringBuilder.Append(":");
-            stringBuilder.Append(mailItem.EntryID);
-            stringBuilder.Append(":");
-            stringBuilder.Append(guid);
-            return stringBuilder.ToString();
         }
 
         private static string GetNewOrExistingGuid(MailItem mailItem)

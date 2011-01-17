@@ -44,7 +44,7 @@
             this._subjectTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._subjectTextBox.Location = new System.Drawing.Point(11, 32);
-            this._subjectTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._subjectTextBox.Margin = new System.Windows.Forms.Padding(2);
             this._subjectTextBox.Name = "_subjectTextBox";
             this._subjectTextBox.Size = new System.Drawing.Size(89, 20);
             this._subjectTextBox.TabIndex = 0;
@@ -74,7 +74,7 @@
             this._folderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._folderTextBox.Location = new System.Drawing.Point(11, 78);
-            this._folderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._folderTextBox.Margin = new System.Windows.Forms.Padding(2);
             this._folderTextBox.Name = "_folderTextBox";
             this._folderTextBox.Size = new System.Drawing.Size(89, 20);
             this._folderTextBox.TabIndex = 3;
@@ -84,7 +84,7 @@
             this._entryIdTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._entryIdTextBox.Location = new System.Drawing.Point(11, 124);
-            this._entryIdTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._entryIdTextBox.Margin = new System.Windows.Forms.Padding(2);
             this._entryIdTextBox.Name = "_entryIdTextBox";
             this._entryIdTextBox.Size = new System.Drawing.Size(89, 20);
             this._entryIdTextBox.TabIndex = 5;
@@ -114,11 +114,12 @@
             this._conversationTtreeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._conversationTtreeView.Location = new System.Drawing.Point(11, 184);
-            this._conversationTtreeView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._conversationTtreeView.Margin = new System.Windows.Forms.Padding(2);
             this._conversationTtreeView.Name = "_conversationTtreeView";
             this._conversationTtreeView.Size = new System.Drawing.Size(92, 93);
             this._conversationTtreeView.TabIndex = 7;
             this._conversationTtreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._conversationTtreeView_NodeMouseClick);
+            this._conversationTtreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._conversationTtreeView_NodeMouseDoubleClick);
             // 
             // _bodyTextBox
             // 
@@ -126,7 +127,7 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._bodyTextBox.Location = new System.Drawing.Point(11, 282);
-            this._bodyTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._bodyTextBox.Margin = new System.Windows.Forms.Padding(2);
             this._bodyTextBox.Multiline = true;
             this._bodyTextBox.Name = "_bodyTextBox";
             this._bodyTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -146,7 +147,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this._subjectTextBox);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "TaskGTDView";
             this.Size = new System.Drawing.Size(112, 374);
             this.ResumeLayout(false);

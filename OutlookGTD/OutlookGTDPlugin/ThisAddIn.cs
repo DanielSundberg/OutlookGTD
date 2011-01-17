@@ -17,8 +17,6 @@ namespace OutlookGTD.UI
 {
     public partial class ThisAddIn
     {
-        private TaskItem _taskItem;
-        private MailItem _mailItem;
         private TaskGTDView _taskPaneControl;
         private Microsoft.Office.Tools.CustomTaskPane _customTaskPane;
         private Ribbon1 _ribbon1;
@@ -35,11 +33,6 @@ namespace OutlookGTD.UI
             _activeExplorer.SelectionChange += new ExplorerEvents_10_SelectionChangeEventHandler(ThisAddIn_SelectionChange);
 
             _ribbon1.SetApplication(Application);
-        }
-
-        void explorer2_SelectionChange()
-        {
-            Debug.WriteLine("Test");
         }
 
         private void ThisAddIn_SelectionChange()
@@ -80,12 +73,6 @@ namespace OutlookGTD.UI
                     _taskPaneControl.ClearLinkedMessages();
                 }
             }
-        }
-
-        void explorer_SelectionChange()
-        {
-            //Application.ActiveExplorer().Selection.
-            Debug.WriteLine("Selection changed");
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)

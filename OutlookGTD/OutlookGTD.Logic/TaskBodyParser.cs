@@ -16,7 +16,6 @@ namespace OutlookGTD.Logic
     {
         private TaskItem _taskItem;
         private Stores _stores;
-        private Folder _rootFolder;
 
         public TaskBodyParser(Stores stores)
         {
@@ -35,6 +34,7 @@ namespace OutlookGTD.Logic
 
             if (_taskItem.Body != null)
             {
+                Dictionary<string, string> replaceDictionary = new Dictionary<string, string>();
                 using (StringReader stringReader = new StringReader(_taskItem.Body))
                 {
                     while (stringReader.Peek() > 0)
@@ -55,12 +55,13 @@ namespace OutlookGTD.Logic
                             string newFolderPath;
                             MailItem mailItem = GetMailItem(store, entryId, guid, out itemHasMoved, out newFolderPath);
 
-                            if (itemHasMoved)
-                            {
-                                // TODO: Update task mail link
-                            }
                             if (mailItem != null)
                             {
+                                if (itemHasMoved)
+                                {
+                                    replaceDictionary.Add(line, Utils.BuildMailItemLink(mailItem, newFolderPath, guid));
+                                }
+
                                 MessageWrapper messageWrapper = new MessageWrapper();
                                 messageWrapper.Subject = mailItem.Subject;
                                 messageWrapper.Sender = mailItem.SenderName;
@@ -74,6 +75,15 @@ namespace OutlookGTD.Logic
                                 messages.Add(messageWrapper);
                             }
                         }
+                    }
+                    // Update mail links
+                    if (replaceDictionary.Count > 0)
+                    {
+                        foreach (string key in replaceDictionary.Keys)
+                        {
+                            _taskItem.Body = _taskItem.Body.Replace(key, replaceDictionary[key]);
+                        }
+                        _taskItem.Save();
                     }
                 }
             }
@@ -195,17 +205,21 @@ namespace OutlookGTD.Logic
 
             if (folder.DefaultItemType == OlItemType.olMailItem)
             {
-                if (folder.Name == "Deleted Items") return null;
-                foreach (MailItem item in folder.Items)
+                string folderName = folder.Name;
+                foreach (var item in folder.Items)
                 {
-                    UserProperty userProperty = Utils.GetGtdGuidFromMailItem(item);
-                    if (userProperty != null)
+                    if (item is MailItem)
                     {
-                        if (guidToFind.Equals(userProperty.Value.ToString()))
+                        MailItem mailItem = item as MailItem;
+                        UserProperty userProperty = Utils.GetGtdGuidFromMailItem(mailItem);
+                        if (userProperty != null)
                         {
-                            found = true;
-                            newFolderPath = (item.Parent as Folder).FolderPath;
-                            return item;
+                            if (guidToFind.Equals(userProperty.Value.ToString()))
+                            {
+                                found = true;
+                                newFolderPath = (mailItem.Parent as Folder).FolderPath;
+                                return mailItem;
+                            }
                         }
                     }
                 }
@@ -215,19 +229,19 @@ namespace OutlookGTD.Logic
 
 
 
-        Folder FindFolder(Folders folders, string folderToFind)
-        {
-            Folder foundFolder = null;
-            foreach (Folder f in folders)
-            {
-                if (f.Name == folderToFind)
-                {
-                    foundFolder = f;
-                    break;
-                }
-            }
-            return foundFolder;
-        }
+        //Folder FindFolder(Folders folders, string folderToFind)
+        //{
+        //    Folder foundFolder = null;
+        //    foreach (Folder f in folders)
+        //    {
+        //        if (f.Name == folderToFind)
+        //        {
+        //            foundFolder = f;
+        //            break;
+        //        }
+        //    }
+        //    return foundFolder;
+        //}
 
         private Store GetCurrentStore(string store)
         {

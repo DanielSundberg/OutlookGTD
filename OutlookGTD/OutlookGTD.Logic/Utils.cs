@@ -19,6 +19,23 @@ namespace OutlookGTD.Logic
             return property;
         }
 
+        public static string BuildMailItemLink(MailItem mailItem, string folderPath, string guid)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("MailLink=");
+            stringBuilder.Append(folderPath);
+            stringBuilder.Append(":");
+            stringBuilder.Append(mailItem.EntryID);
+            stringBuilder.Append(":");
+            stringBuilder.Append(guid);
+            return stringBuilder.ToString();
+        }
+
+        public static string BuildMailItemLink(MailItem mailItem, Folder folder, string guid)
+        {
+            return BuildMailItemLink(mailItem, folder.FolderPath, guid);
+        }
+
 
     }
 }

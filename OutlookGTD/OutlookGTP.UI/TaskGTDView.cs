@@ -69,6 +69,11 @@ namespace OutlookGTD.UI
             _conversationTtreeView.Nodes.Clear();
             _bodyTextBox.Text = "";
         }
+
+        private void _conversationTtreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            // TODO: signal so that we can display message on double click
+        }
     }
 }
 
