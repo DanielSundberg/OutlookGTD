@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml.Linq;
 using Microsoft.Office.Core;
@@ -57,7 +58,7 @@ namespace OutlookGTD.UI
                 {
                     MailItem mailItem = item as MailItem;
                     _taskPaneControl.Subject = mailItem.Subject;
-                    _taskPaneControl.FolderPath = mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
+                    _taskPaneControl.FolderPath = GetFolderPathForMailItem(mailItem);
 
                     UserProperty userProperty = Utils.GetGtdGuidFromMailItem(mailItem);
                     if (userProperty != null)
@@ -72,6 +73,18 @@ namespace OutlookGTD.UI
                     //_taskPaneControl.EntryId = guid;
                     _taskPaneControl.ClearLinkedMessages();
                 }
+            }
+        }
+
+        private string GetFolderPathForMailItem(MailItem mailItem)
+        {
+            try
+            {
+                return mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
+            }
+            catch (COMException comException)
+            {
+                return string.Empty;
             }
         }
 
