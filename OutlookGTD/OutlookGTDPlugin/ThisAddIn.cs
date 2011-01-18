@@ -27,6 +27,7 @@ namespace OutlookGTD.UI
         {
 
             _taskPaneControl = new TaskGTDView();
+            _taskPaneControl.MailClicked += new TaskGTDView.MailClickedEventHandler(_taskPaneControl_MailClicked);
             _customTaskPane = this.CustomTaskPanes.Add(_taskPaneControl, "Task info");
             _customTaskPane.Visible = true;
 
@@ -82,18 +83,34 @@ namespace OutlookGTD.UI
             {
                 return mailItem.Application.ActiveExplorer().CurrentFolder.FolderPath;
             }
-            catch (COMException comException)
+            catch (COMException)
             {
                 return string.Empty;
             }
         }
 
-        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
+        private void _taskPaneControl_MailClicked(MessageWrapper messageWrapper)
+        {
+            try
+            {
+                MailItem mailItem2 = Application.Session.GetItemFromID(messageWrapper.EntryId, messageWrapper.StoreId);
+                if (mailItem2 != null)
+                {
+                    mailItem2.Display();
+                }
+            }
+            catch (COMException)
+            {
+                // Swallow exception
+            }
+        }
+
+        private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
 
         }
 
-        protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
+        protected override IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             _ribbon1 = new Ribbon1();
             return _ribbon1;
@@ -107,8 +124,8 @@ namespace OutlookGTD.UI
         /// </summary>
         private void InternalStartup()
         {
-            this.Startup += new System.EventHandler(ThisAddIn_Startup);
-            this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
+            this.Startup += new EventHandler(ThisAddIn_Startup);
+            this.Shutdown += new EventHandler(ThisAddIn_Shutdown);
         }
 
         #endregion

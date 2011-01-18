@@ -6,8 +6,6 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookGTD.Logic
 {
-    
-
     public class Utils
     {
         public static string GTD_GUID = "EEEC6A13-753A-4F1D-9F03-B6AB29ACEB03";
@@ -35,7 +33,5 @@ namespace OutlookGTD.Logic
         {
             return BuildMailItemLink(mailItem, folder.FolderPath, guid);
         }
-
-
     }
 }

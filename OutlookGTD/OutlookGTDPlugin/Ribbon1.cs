@@ -15,7 +15,7 @@ using OutlookGTD.Logic;
 namespace OutlookGTDPlugin
 {
     [ComVisible(true)]
-    public class Ribbon1 : Office.IRibbonExtensibility
+    public class Ribbon1 : IRibbonExtensibility
     {
         private Office.IRibbonUI ribbon;
         private Microsoft.Office.Interop.Outlook.Application _application;
@@ -43,7 +43,7 @@ namespace OutlookGTDPlugin
         {            
             var selection = _application.ActiveExplorer().Selection.Cast<MailItem>();
             var mailItem = selection.ElementAt(0);
-            
+
             var folder = mailItem.Parent as Folder;
 
             // Create guid for mail here
@@ -130,7 +130,7 @@ namespace OutlookGTDPlugin
             }
         }
 
-        public void Ribbon1_Load(Office.IRibbonUI ribbonUI)
+        public void Ribbon1_Load(IRibbonUI ribbonUI)
         {
             this.ribbon = ribbonUI;
         }

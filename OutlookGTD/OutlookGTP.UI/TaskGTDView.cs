@@ -11,6 +11,9 @@ namespace OutlookGTD.UI
 {
     public partial class TaskGTDView : UserControl
     {
+        public delegate void MailClickedEventHandler(MessageWrapper messageWrapper);
+        public event MailClickedEventHandler MailClicked;
+
         public void ShowMessage(string message)
         {
             MessageBox.Show(message);
@@ -46,17 +49,17 @@ namespace OutlookGTD.UI
             foreach (var item in subjects)
             {
                 TreeNode node = new TreeNode(string.Format("{0} ({1})", item.Subject, item.Sender));
-                node.Tag = item.Body;
+                node.Tag = item;
                 _conversationTtreeView.Nodes.Add(node);
             }
         }
 
         private void _conversationTtreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            string messageBody = e.Node.Tag as string;
-            if (messageBody != null)
+            MessageWrapper messageWrapper = e.Node.Tag as MessageWrapper;
+            if (messageWrapper != null)
             {
-                _bodyTextBox.Text = messageBody;
+                _bodyTextBox.Text = messageWrapper.Body;
             }
             else 
             {
@@ -72,7 +75,10 @@ namespace OutlookGTD.UI
 
         private void _conversationTtreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            // TODO: signal so that we can display message on double click
+            if (MailClicked != null)
+            {
+                MailClicked(_conversationTtreeView.SelectedNode.Tag as MessageWrapper);
+            }
         }
     }
 }

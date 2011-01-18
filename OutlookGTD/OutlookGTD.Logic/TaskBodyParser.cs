@@ -66,6 +66,12 @@ namespace OutlookGTD.Logic
                                 messageWrapper.Subject = mailItem.Subject;
                                 messageWrapper.Sender = mailItem.SenderName;
                                 messageWrapper.Body = TaskBodyParser.RemoveHyperLinks(mailItem.Body);
+                                if (mailItem.Parent is Folder)
+                                {
+                                    messageWrapper.StoreId = (mailItem.Parent as Folder).StoreID;
+                                }
+                                messageWrapper.EntryId = mailItem.EntryID;
+                                
                                 messages.Add(messageWrapper);
                             }
                             else
@@ -163,9 +169,6 @@ namespace OutlookGTD.Logic
 
         private MailItem GetMailItemFromStore(string guidToFind, Store currentStore, out bool found, out string newFolderPath)
         {
-            newFolderPath = string.Empty;
-            found = false;
-
             // Go through all items in root folder
             Folder rootFolder = (Folder)currentStore.GetRootFolder();
 
@@ -176,9 +179,6 @@ namespace OutlookGTD.Logic
 
         private MailItem SearchFolder(string guidToFind, Folder folder, out bool found, out string newFolderPath)
         {
-            found = false;
-            newFolderPath = string.Empty;
-
             MailItem mailItem = FindMailItem(guidToFind, folder, out found, out newFolderPath);
             if (found)
             {
@@ -188,7 +188,7 @@ namespace OutlookGTD.Logic
             // Go through sub folders
             foreach (Folder subFolder in folder.Folders)
             {
-                string folderPath = subFolder.FolderPath;
+                string folderPath = subFolder.FolderPath; // For debug
                 MailItem mailItem2 = SearchFolder(guidToFind, subFolder, out found, out newFolderPath);
                 if (found)
                 {
@@ -205,7 +205,7 @@ namespace OutlookGTD.Logic
 
             if (folder.DefaultItemType == OlItemType.olMailItem)
             {
-                string folderName = folder.Name;
+                string folderName = folder.Name; // For debug
                 foreach (var item in folder.Items)
                 {
                     if (item is MailItem)
@@ -226,22 +226,6 @@ namespace OutlookGTD.Logic
             }
             return null;
         }
-
-
-
-        //Folder FindFolder(Folders folders, string folderToFind)
-        //{
-        //    Folder foundFolder = null;
-        //    foreach (Folder f in folders)
-        //    {
-        //        if (f.Name == folderToFind)
-        //        {
-        //            foundFolder = f;
-        //            break;
-        //        }
-        //    }
-        //    return foundFolder;
-        //}
 
         private Store GetCurrentStore(string store)
         {
