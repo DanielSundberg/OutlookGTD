@@ -95,7 +95,7 @@ namespace OutlookGTD.Logic.Test
             string expectedBody = "From: Hi-Sung Kim\n" +
                 "To: per.neihoff@now.se ";
 
-            string cleanBody = TaskBodyParser.RemoveHyperLinks(mailBody);
+            string cleanBody = Utils.RemoveHyperLinks(mailBody);
             Assert.AreEqual(expectedBody, cleanBody);
         }
     }

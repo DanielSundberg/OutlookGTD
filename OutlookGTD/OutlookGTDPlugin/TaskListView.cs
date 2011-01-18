@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,8 @@ namespace OutlookGTDPlugin
         public TaskListView()
         {
             InitializeComponent();
+
+            _listView.ListViewItemSorter = new ListViewItemComparer();
         }
 
         public void SetItems(List<TaskItem> taskList)
@@ -32,6 +35,7 @@ namespace OutlookGTDPlugin
                     _listView.Items.Add(listViewItem);
                 }
             }
+            _listView.Sort();
         }
 
         private static string GetDueDate(TaskItem item)
@@ -63,6 +67,41 @@ namespace OutlookGTDPlugin
         private void _okButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
+        }
+
+        class ListViewItemComparer : IComparer
+        {
+            public int Compare(object x, object y)
+            {
+                {
+                    int returnVal;
+                    // Determine whether the type being compared is a date type.
+                    try
+                    {
+                        // Parse the two objects passed as a parameter as a DateTime.
+                        System.DateTime firstDate = 
+                                DateTime.Parse(((ListViewItem)x).SubItems[1].Text);
+                        System.DateTime secondDate = 
+                                DateTime.Parse(((ListViewItem)y).SubItems[1].Text);
+                        // Compare the two dates.
+                        returnVal = DateTime.Compare(firstDate, secondDate);
+                    }
+                    // If neither compared object has a valid date format, compare
+                    // as a string.
+                    catch 
+                    {
+                        // Compare the two items as a string.
+                        returnVal = String.Compare(((ListViewItem)x).SubItems[1].Text,
+                                    ((ListViewItem)y).SubItems[1].Text);
+                    }
+                    // Determine whether the sort order is descending.
+                    //if (order == SortOrder.Descending)
+                    //// Invert the value returned by String.Compare.
+                    //    returnVal *= -1;
+                    return returnVal;
+                }
+
+            }
         }
     }
 }

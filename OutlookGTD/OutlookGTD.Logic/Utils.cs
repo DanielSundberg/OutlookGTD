@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookGTD.Logic
@@ -32,6 +33,11 @@ namespace OutlookGTD.Logic
         public static string BuildMailItemLink(MailItem mailItem, Folder folder, string guid)
         {
             return BuildMailItemLink(mailItem, folder.FolderPath, guid);
+        }
+
+        public static string RemoveHyperLinks(string htmlBody)
+        {            
+            return Regex.Replace(htmlBody, "HYPERLINK \".*\"", "");
         }
     }
 }

@@ -51,7 +51,7 @@ namespace OutlookGTDPlugin
 
             TaskItem taskItem = _application.CreateItem(OlItemType.olTaskItem);
             taskItem.Subject = mailItem.Subject;
-            taskItem.Body = "\n\n" + Utils.BuildMailItemLink(mailItem, folder, guid);
+            taskItem.Body = Utils.RemoveHyperLinks(mailItem.Body) + "\n\n" + Utils.BuildMailItemLink(mailItem, folder, guid);
             taskItem.Display();
         }
 

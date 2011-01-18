@@ -65,7 +65,7 @@ namespace OutlookGTD.Logic
                                 MessageWrapper messageWrapper = new MessageWrapper();
                                 messageWrapper.Subject = mailItem.Subject;
                                 messageWrapper.Sender = mailItem.SenderName;
-                                messageWrapper.Body = TaskBodyParser.RemoveHyperLinks(mailItem.Body);
+                                messageWrapper.Body = Utils.RemoveHyperLinks(mailItem.Body);
                                 if (mailItem.Parent is Folder)
                                 {
                                     messageWrapper.StoreId = (mailItem.Parent as Folder).StoreID;
@@ -278,11 +278,6 @@ namespace OutlookGTD.Logic
             {
                 throw new FormatException(@"Folder path is of invalid format, should be something like: \\your.name@domain.com\Inbox");
             }   
-        }
-
-        public static string RemoveHyperLinks(string htmlBody)
-        {            
-            return Regex.Replace(htmlBody, "HYPERLINK \".*\"", "");
         }
     }
 }
