@@ -45,6 +45,7 @@ namespace OutlookGTD.UI
         public void SetLinkedMessages(List<MessageWrapper> subjects)
         {
             // TODO: Check if node.Tag leaks memory
+            _bodyTextBox.Text = "";
             _conversationTtreeView.Nodes.Clear();
             foreach (var item in subjects)
             {
