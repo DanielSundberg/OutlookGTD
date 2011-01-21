@@ -40,46 +40,53 @@ namespace OutlookGTD.Logic
                     while (stringReader.Peek() > 0)
                     {
                         string line = stringReader.ReadLine();
-                        if (line.StartsWith("MailLink"))
+                        try
                         {
-                            string folderPath, entryId, guid;
-
-                            GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid);
-
-                            string store;
-                            List<string> folders;
-
-                            ParseStoreAndFolders(folderPath, out store, out folders);
-
-                            bool itemHasMoved;
-                            string newFolderPath;
-                            MailItem mailItem = GetMailItem(store, entryId, guid, out itemHasMoved, out newFolderPath);
-
-                            if (mailItem != null)
+                            if (line.StartsWith("MailLink"))
                             {
-                                if (itemHasMoved)
-                                {
-                                    replaceDictionary.Add(line, Utils.BuildMailItemLink(mailItem, newFolderPath, guid));
-                                }
+                                string folderPath, entryId, guid;
 
-                                MessageWrapper messageWrapper = new MessageWrapper();
-                                messageWrapper.Subject = mailItem.Subject;
-                                messageWrapper.Sender = mailItem.SenderName;
-                                messageWrapper.Body = Utils.RemoveHyperLinks(mailItem.Body);
-                                if (mailItem.Parent is Folder)
+                                GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid);
+
+                                string store;
+                                List<string> folders;
+
+                                ParseStoreAndFolders(folderPath, out store, out folders);
+
+                                bool itemHasMoved;
+                                string newFolderPath;
+                                MailItem mailItem = GetMailItem(store, entryId, guid, out itemHasMoved, out newFolderPath);
+
+                                if (mailItem != null)
                                 {
-                                    messageWrapper.StoreId = (mailItem.Parent as Folder).StoreID;
+                                    if (itemHasMoved)
+                                    {
+                                        replaceDictionary.Add(line, Utils.BuildMailItemLink(mailItem, newFolderPath, guid));
+                                    }
+
+                                    MessageWrapper messageWrapper = new MessageWrapper();
+                                    messageWrapper.Subject = mailItem.Subject;
+                                    messageWrapper.Sender = mailItem.SenderName;
+                                    messageWrapper.Body = Utils.RemoveHyperLinks(mailItem.Body);
+                                    if (mailItem.Parent is Folder)
+                                    {
+                                        messageWrapper.StoreId = (mailItem.Parent as Folder).StoreID;
+                                    }
+                                    messageWrapper.EntryId = mailItem.EntryID;
+
+                                    messages.Add(messageWrapper);
                                 }
-                                messageWrapper.EntryId = mailItem.EntryID;
-                                
-                                messages.Add(messageWrapper);
+                                else
+                                {
+                                    MessageWrapper messageWrapper = new MessageWrapper();
+                                    messageWrapper.Subject = "One mail item not found";
+                                    messages.Add(messageWrapper);
+                                }
                             }
-                            else
-                            {
-                                MessageWrapper messageWrapper = new MessageWrapper();
-                                messageWrapper.Subject = "One mail item not found";
-                                messages.Add(messageWrapper);
-                            }
+                        }
+                        catch (FormatException)
+                        {
+                            // TODO: don't swallow exception
                         }
                     }
                     // Update mail links
