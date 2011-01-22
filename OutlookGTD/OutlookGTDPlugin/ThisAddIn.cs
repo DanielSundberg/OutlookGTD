@@ -13,12 +13,13 @@ using OutlookGTD.Logic;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 using OutlookGTDPlugin;
+using System.Windows.Forms;
 
 namespace OutlookGTD.UI
 {
     public partial class ThisAddIn
     {
-        private TaskGTDView _taskPaneControl;
+        private ITaskGTDView _taskPaneControl;
         private Microsoft.Office.Tools.CustomTaskPane _customTaskPane;
         private Ribbon1 _ribbon1;
         private Explorer _activeExplorer;
@@ -26,9 +27,9 @@ namespace OutlookGTD.UI
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
 
-            _taskPaneControl = new TaskGTDView();
+            _taskPaneControl = new TaskGTDViewWPFHost();
             _taskPaneControl.MailClicked += new TaskGTDView.MailClickedEventHandler(_taskPaneControl_MailClicked);
-            _customTaskPane = this.CustomTaskPanes.Add(_taskPaneControl, "Task info");
+            _customTaskPane = this.CustomTaskPanes.Add(_taskPaneControl as UserControl, "Task info");
             _customTaskPane.Visible = true;
 
             _activeExplorer = Application.ActiveExplorer();

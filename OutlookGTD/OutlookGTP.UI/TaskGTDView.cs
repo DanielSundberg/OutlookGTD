@@ -9,7 +9,7 @@ using OutlookGTP.UI;
 
 namespace OutlookGTD.UI
 {
-    public partial class TaskGTDView : UserControl
+    public partial class TaskGTDView : UserControl, OutlookGTP.UI.ITaskGTDView
     {
         public delegate void MailClickedEventHandler(MessageWrapper messageWrapper);
         public event MailClickedEventHandler MailClicked;
@@ -17,6 +17,11 @@ namespace OutlookGTD.UI
         public void ShowMessage(string message)
         {
             MessageBox.Show(message);
+        }
+
+        public UserControl GetUserControl()
+        {
+            return this;
         }
 
         public TaskGTDView()
