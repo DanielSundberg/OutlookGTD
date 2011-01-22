@@ -83,6 +83,10 @@ namespace OutlookGTP.UI
             {
                 txtBody.Text = messageWrapper.Body;
             }
+            else
+            {
+                txtBody.Text = "";
+            }
         }
     }
 }

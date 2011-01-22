@@ -35,7 +35,7 @@
             </ListView.View>
         </ListView>
         </ScrollViewer>
-        <TextBlock TextWrapping="Wrap" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="Test" Name="txtBody"/>
+        <TextBlock TextWrapping="Wrap" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Body}" Name="txtBody"/>
         
         
     </Grid>

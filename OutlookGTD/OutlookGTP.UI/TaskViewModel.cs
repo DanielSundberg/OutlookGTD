@@ -74,6 +74,7 @@ namespace OutlookGTP.UI
             set
             {
                 _subject = value;
+                Body = "";
                 if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs("Subject"));
@@ -81,9 +82,27 @@ namespace OutlookGTP.UI
             }
         }
 
+        public string Body
+        {
+            get
+            {
+                return _body;
+            }
+            set
+            {
+                _body = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("Body"));
+                }
+
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private string _entryId;
         private string _folderPath;
         private string _subject;
+        private string _body;
     }
 }
