@@ -20,9 +20,11 @@
         <TextBox VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1" Text="{Binding Subject}" Margin="3"/>
 
         <ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <ListView x:Name="lstData"
+            <ListView x:Name="lstData"
           ItemsSource="{Binding MessageWrapperList}"
-                  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionChanged="lstData_SelectionChanged">
+                  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                  SelectionChanged="lstData_SelectionChanged" 
+                    MouseDoubleClick="lstData_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Subject"

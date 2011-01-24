@@ -17,6 +17,16 @@ namespace OutlookGTP.UI
 
             _taskViewModel = new TaskViewModel();
             _taskViewWPF.DataContext = _taskViewModel;
+
+            _taskViewModel.MailClicked += new OutlookGTD.UI.TaskGTDView.MailClickedEventHandler(_taskViewModel_MailClicked);
+        }
+
+        private void _taskViewModel_MailClicked(MessageWrapper messageWrapper)
+        {
+            if (MailClicked != null)
+            {
+                MailClicked(messageWrapper);
+            }
         }
 
         public UserControl GetUserControl()

@@ -84,5 +84,11 @@ namespace OutlookGTP.UI
                 txtBody.Text = "";
             }
         }
+
+        private void lstData_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            dynamic viewModel = DataContext;
+            viewModel.MailDoubleClick(lstData.SelectedItem as MessageWrapper);
+        }
     }
 }

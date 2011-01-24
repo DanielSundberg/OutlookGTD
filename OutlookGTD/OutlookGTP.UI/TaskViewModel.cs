@@ -5,6 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace OutlookGTP.UI
 {
@@ -100,16 +101,77 @@ namespace OutlookGTP.UI
             }
         }
 
+        public void MailDoubleClick(MessageWrapper messageWrapper)
+        {
+            if (MailClicked != null)
+            {
+                MailClicked(messageWrapper);
+            }
+        }
+
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set
+            {
+                _selectedIndex = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("SelectedIndex"));
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private string _entryId;
         private string _folderPath;
         private string _subject;
         private string _body;
+        private int _selectedIndex;
 
         public void Clear()
         {
             MessageWrapperList.Clear();
             Subject = "";
         }
+        
+        public class DelegateCommand : ICommand
+        {
+            private bool _isEnabled;
+            private Action _onExecute;
+
+            public DelegateCommand(Action executeHandler)
+            {
+                _isEnabled = true;
+                _onExecute = executeHandler;
+            }
+
+            public bool IsEnabled
+            {
+                get { return _isEnabled; }
+                set
+                {
+                    _isEnabled = value;
+                    if (CanExecuteChanged != null)
+                    {
+                        CanExecuteChanged(this, EventArgs.Empty);
+                    }
+                }
+            }
+
+
+            public bool CanExecute(object parameter)
+            {
+                return _isEnabled;
+            }
+
+            public event EventHandler CanExecuteChanged;
+
+            public void Execute(object parameter)
+            {
+                _onExecute();
+            }
+        }
+
     }
 }
