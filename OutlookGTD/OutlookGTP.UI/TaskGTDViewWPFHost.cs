@@ -26,7 +26,7 @@ namespace OutlookGTP.UI
 
         public void ClearLinkedMessages()
         {
-            //_taskViewWPF.ClearLinkedMessages();
+            _taskViewModel.Clear();
         }
 
         public string EntryId

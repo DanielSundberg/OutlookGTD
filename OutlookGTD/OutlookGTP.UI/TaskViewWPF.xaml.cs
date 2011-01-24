@@ -29,10 +29,6 @@ namespace OutlookGTP.UI
 
         }
 
-        public void ClearLinkedMessages()
-        {
-        }
-
         public string EntryId
         {
             get

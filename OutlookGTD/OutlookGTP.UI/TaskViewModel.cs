@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows.Forms;
 
 namespace OutlookGTP.UI
 {
@@ -62,7 +63,7 @@ namespace OutlookGTP.UI
 
         public void ShowMessage(string message)
         {
-            //_taskViewWPF.ShowMessage(message);
+            MessageBox.Show(message);
         }
 
         public string Subject
@@ -104,5 +105,11 @@ namespace OutlookGTP.UI
         private string _folderPath;
         private string _subject;
         private string _body;
+
+        public void Clear()
+        {
+            MessageWrapperList.Clear();
+            Subject = "";
+        }
     }
 }
