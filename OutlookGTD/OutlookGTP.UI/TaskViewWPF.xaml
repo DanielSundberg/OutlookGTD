@@ -11,6 +11,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="150" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -28,7 +29,7 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Subject"
-                      Width="150"
+                      Width="140"
                DisplayMemberBinding="{Binding Path=Subject}" />
                     <GridViewColumn Header="Sender"
                       Width="Auto"
@@ -37,8 +38,23 @@
             </ListView.View>
         </ListView>
         </ScrollViewer>
-        <TextBlock TextWrapping="Wrap" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Body}" Name="txtBody"/>
-        
-        
+        <TextBlock TextWrapping="Wrap" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Body}" Name="txtBody" Margin="5"/>
+
+        <Expander Header="Debug" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" IsExpanded="False">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="EntryId:" Grid.Row="0"/>
+                <TextBox Grid.Row="1" Text="{Binding EntryId}" Height="80" TextWrapping="Wrap" />
+                <Label Content="FolderPath:" Grid.Row="2"/>
+                <TextBox Grid.Row="3" Text="{Binding FolderPath}"/>
+            </Grid>
+        </Expander>
+
+
     </Grid>
 </UserControl>
