@@ -38,8 +38,9 @@
             </ListView.View>
         </ListView>
         </ScrollViewer>
-        <TextBlock TextWrapping="Wrap" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Body}" Name="txtBody" Margin="5"/>
-
+        <ScrollViewer Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <TextBlock TextWrapping="Wrap" Text="{Binding Body}" Name="txtBody" Margin="5"/>
+        </ScrollViewer>
         <Expander Header="Debug" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" IsExpanded="False">
             <Grid>
                 <Grid.RowDefinitions>
