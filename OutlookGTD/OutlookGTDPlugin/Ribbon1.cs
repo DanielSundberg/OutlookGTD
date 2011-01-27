@@ -60,7 +60,7 @@ namespace OutlookGTDPlugin
         {
             //List<TaskItem> taskList = FindAllTasks(_application.Session.Stores as Stores);
             List<TaskItem> taskList = TaskModel.FindDefaultTasks(_application);
-            using (TaskListView taskListView = new TaskListView())
+            using (TaskListView taskListView = new TaskListView(_application.Session.Stores as Stores))
             {
                 taskListView.SetItems(taskList);
                 if (taskListView.ShowDialog() == DialogResult.OK)

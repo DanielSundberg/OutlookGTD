@@ -32,6 +32,8 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this._okButton = new System.Windows.Forms.Button();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._showAllButton = new System.Windows.Forms.Button();
+            this._cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // _listView
@@ -54,7 +56,7 @@
             // 
             // _okButton
             // 
-            this._okButton.Location = new System.Drawing.Point(327, 421);
+            this._okButton.Location = new System.Drawing.Point(263, 421);
             this._okButton.Name = "_okButton";
             this._okButton.Size = new System.Drawing.Size(75, 23);
             this._okButton.TabIndex = 1;
@@ -67,11 +69,33 @@
             this.columnHeader2.Text = "Due date";
             this.columnHeader2.Width = 123;
             // 
+            // _showAllButton
+            // 
+            this._showAllButton.Location = new System.Drawing.Point(12, 421);
+            this._showAllButton.Name = "_showAllButton";
+            this._showAllButton.Size = new System.Drawing.Size(75, 23);
+            this._showAllButton.TabIndex = 2;
+            this._showAllButton.Text = "&Show all";
+            this._showAllButton.UseVisualStyleBackColor = true;
+            this._showAllButton.Click += new System.EventHandler(this._showAllButton_Click);
+            // 
+            // _cancelButton
+            // 
+            this._cancelButton.Location = new System.Drawing.Point(344, 421);
+            this._cancelButton.Name = "_cancelButton";
+            this._cancelButton.Size = new System.Drawing.Size(75, 23);
+            this._cancelButton.TabIndex = 3;
+            this._cancelButton.Text = "&Cancel";
+            this._cancelButton.UseVisualStyleBackColor = true;
+            this._cancelButton.Click += new System.EventHandler(this._cancelButton_Click);
+            // 
             // TaskListView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(431, 456);
+            this.Controls.Add(this._cancelButton);
+            this.Controls.Add(this._showAllButton);
             this.Controls.Add(this._okButton);
             this.Controls.Add(this._listView);
             this.Name = "TaskListView";
@@ -86,5 +110,7 @@
         private System.Windows.Forms.Button _okButton;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.Button _showAllButton;
+        private System.Windows.Forms.Button _cancelButton;
     }
 }

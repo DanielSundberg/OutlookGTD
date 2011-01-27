@@ -14,15 +14,23 @@ namespace OutlookGTDPlugin
 {
     public partial class TaskListView : Form
     {
+        private Stores _stores;
         public TaskListView()
         {
             InitializeComponent();
-
             _listView.ListViewItemSorter = new ListViewItemComparer();
+        }
+
+        public TaskListView(Stores stores)
+        {
+            InitializeComponent();
+            _listView.ListViewItemSorter = new ListViewItemComparer();
+            _stores = stores;
         }
 
         public void SetItems(List<TaskItem> taskList)
         {
+            _listView.Items.Clear();
             foreach (TaskItem item in taskList)
             {
                 if ((item.Status == OlTaskStatus.olTaskInProgress) ||
@@ -69,6 +77,16 @@ namespace OutlookGTDPlugin
             DialogResult = DialogResult.OK;
         }
 
+        private void _showAllButton_Click(object sender, EventArgs e)
+        {
+            SetItems(TaskModel.FindAllTasks(_stores));
+        }
+
+        private void _cancelButton_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+
         class ListViewItemComparer : IComparer
         {
             public int Compare(object x, object y)
@@ -103,5 +121,6 @@ namespace OutlookGTDPlugin
 
             }
         }
+
     }
 }
