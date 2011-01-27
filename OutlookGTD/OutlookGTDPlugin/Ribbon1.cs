@@ -58,7 +58,8 @@ namespace OutlookGTDPlugin
 
         public void LinkToTaskClicked(IRibbonControl control)
         {
-            List<TaskItem> taskList = FindAllTasks(_application.Session.Stores as Stores);
+            //List<TaskItem> taskList = FindAllTasks(_application.Session.Stores as Stores);
+            List<TaskItem> taskList = FindDefaultTasks();
             using (TaskListView taskListView = new TaskListView())
             {
                 taskListView.SetItems(taskList);
@@ -84,6 +85,15 @@ namespace OutlookGTDPlugin
                 }
             }
             
+        }
+
+        public List<TaskItem> FindDefaultTasks()
+        {
+            List<TaskItem> taskList = new List<TaskItem>();
+
+            Folder taskFolder = (Folder)_application.Session.GetDefaultFolder(OlDefaultFolders.olFolderTasks);
+            FindTasksInFolderNonRecursive(taskList, taskFolder);
+            return taskList;
         }
 
         public List<TaskItem> FindAllTasks(Stores stores)
@@ -127,6 +137,17 @@ namespace OutlookGTDPlugin
             foreach (Folder f in folder.Folders)
             {
                 FindTasksInFolder(taskList, f);
+            }
+        }
+
+        private void FindTasksInFolderNonRecursive(List<TaskItem> taskList, Folder folder)
+        {
+            if (folder.DefaultItemType == OlItemType.olTaskItem)
+            {
+                foreach (TaskItem taskItem in folder.Items)
+                {
+                    taskList.Add(taskItem);
+                }
             }
         }
 
