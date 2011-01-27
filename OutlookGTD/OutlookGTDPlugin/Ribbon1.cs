@@ -59,7 +59,7 @@ namespace OutlookGTDPlugin
         public void LinkToTaskClicked(IRibbonControl control)
         {
             //List<TaskItem> taskList = FindAllTasks(_application.Session.Stores as Stores);
-            List<TaskItem> taskList = FindDefaultTasks();
+            List<TaskItem> taskList = TaskModel.FindDefaultTasks(_application);
             using (TaskListView taskListView = new TaskListView())
             {
                 taskListView.SetItems(taskList);
@@ -87,24 +87,6 @@ namespace OutlookGTDPlugin
             
         }
 
-        public List<TaskItem> FindDefaultTasks()
-        {
-            List<TaskItem> taskList = new List<TaskItem>();
-
-            Folder taskFolder = (Folder)_application.Session.GetDefaultFolder(OlDefaultFolders.olFolderTasks);
-            FindTasksInFolderNonRecursive(taskList, taskFolder);
-            return taskList;
-        }
-
-        public List<TaskItem> FindAllTasks(Stores stores)
-        {
-            List<TaskItem> taskList = new List<TaskItem>();
-            foreach (Store store in stores)
-            {
-                FindTasksInStore(taskList, store);
-            }
-            return taskList;
-        }
 
         private static string GetNewOrExistingGuid(MailItem mailItem)
         {
@@ -119,37 +101,6 @@ namespace OutlookGTDPlugin
             return guid.ToString();
         }
 
-
-        private void FindTasksInStore(List<TaskItem> taskList, Store store)
-        {
-            FindTasksInFolder(taskList, store.GetRootFolder() as Folder);
-        }
-
-        private void FindTasksInFolder(List<TaskItem> taskList, Folder folder)
-        {
-            if (folder.DefaultItemType == OlItemType.olTaskItem)
-            {
-                foreach (TaskItem taskItem in folder.Items)
-                {
-                    taskList.Add(taskItem);
-                }
-            }
-            foreach (Folder f in folder.Folders)
-            {
-                FindTasksInFolder(taskList, f);
-            }
-        }
-
-        private void FindTasksInFolderNonRecursive(List<TaskItem> taskList, Folder folder)
-        {
-            if (folder.DefaultItemType == OlItemType.olTaskItem)
-            {
-                foreach (TaskItem taskItem in folder.Items)
-                {
-                    taskList.Add(taskItem);
-                }
-            }
-        }
 
         public void Ribbon1_Load(IRibbonUI ribbonUI)
         {
