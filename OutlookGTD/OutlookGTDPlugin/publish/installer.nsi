@@ -21,6 +21,7 @@ Section Main
     File "Application Files\OutlookGTDPlugin_0_1_0_1\OutlookGTDPlugin.dll.manifest"
     File "Application Files\OutlookGTDPlugin_0_1_0_1\OutlookGTDPlugin.vsto"
     File "Application Files\OutlookGTDPlugin_0_1_0_1\OutlookGTP.UI.dll.deploy"
+    File "Application Files\OutlookGTDPlugin_0_1_0_1\OutlookGTD.Logic.dll.deploy"
 
     ; Launch click once setup
     Exec     '"$TEMP\OutlookGTDInstaller\Setup.exe"'
