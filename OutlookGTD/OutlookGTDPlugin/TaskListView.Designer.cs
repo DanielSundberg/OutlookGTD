@@ -30,8 +30,8 @@
         {
             this._listView = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this._okButton = new System.Windows.Forms.Button();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._okButton = new System.Windows.Forms.Button();
             this._showAllButton = new System.Windows.Forms.Button();
             this._cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -41,6 +41,7 @@
             this._listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
+            this._listView.FullRowSelect = true;
             this._listView.Location = new System.Drawing.Point(12, 12);
             this._listView.Name = "_listView";
             this._listView.Size = new System.Drawing.Size(407, 403);
@@ -54,6 +55,11 @@
             this.columnHeader1.Text = "Subject";
             this.columnHeader1.Width = 279;
             // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Due date";
+            this.columnHeader2.Width = 123;
+            // 
             // _okButton
             // 
             this._okButton.Location = new System.Drawing.Point(263, 421);
@@ -63,11 +69,6 @@
             this._okButton.Text = "&Ok";
             this._okButton.UseVisualStyleBackColor = true;
             this._okButton.Click += new System.EventHandler(this._okButton_Click);
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Due date";
-            this.columnHeader2.Width = 123;
             // 
             // _showAllButton
             // 
