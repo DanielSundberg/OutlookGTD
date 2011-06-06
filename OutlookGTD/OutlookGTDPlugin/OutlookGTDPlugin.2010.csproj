@@ -246,6 +246,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OutlookGTD.Common\OutlookGTD.Common.csproj">
+      <Project>{D4C5AD12-B324-48A3-9153-BBF1526957EB}</Project>
+      <Name>OutlookGTD.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OutlookGTD.Logic\OutlookGTD.Logic.csproj">
       <Project>{34755F18-A290-4FE8-A185-DA5B9F985699}</Project>
       <Name>OutlookGTD.Logic</Name>

@@ -82,6 +82,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OutlookGTD.Common\OutlookGTD.Common.csproj">
+      <Project>{D4C5AD12-B324-48A3-9153-BBF1526957EB}</Project>
+      <Name>OutlookGTD.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

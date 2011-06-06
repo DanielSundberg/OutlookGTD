@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Office.Interop.Outlook;
+using OutlookGTD.Common;
 using OutlookGTP.UI;
 using Exception = System.Exception;
 using Outlook = Microsoft.Office.Interop.Outlook;
@@ -12,7 +13,7 @@ using System.Runtime.InteropServices;
 
 namespace OutlookGTD.Logic
 {
-    public class TaskBodyParser
+    public class TaskBodyParser : IMailItemFinder
     {
         private TaskItem _taskItem;
         private Stores _stores;
@@ -53,35 +54,25 @@ namespace OutlookGTD.Logic
 
                                 ParseStoreAndFolders(folderPath, out store, out folders);
 
-                                bool itemHasMoved;
-                                string newFolderPath;
-                                MailItem mailItem = GetMailItem(store, entryId, guid, out itemHasMoved, out newFolderPath);
+                                MailItem mailItem = TryGetMailItem(store, entryId);
 
+                                MessageWrapper messageWrapper = new MessageWrapper(this);
                                 if (mailItem != null)
                                 {
-                                    if (itemHasMoved)
-                                    {
-                                        replaceDictionary.Add(line, Utils.BuildMailItemLink(mailItem, newFolderPath, guid));
-                                    }
-
-                                    MessageWrapper messageWrapper = new MessageWrapper();
-                                    messageWrapper.Subject = mailItem.Subject;
-                                    messageWrapper.Sender = mailItem.SenderName;
-                                    messageWrapper.Body = Utils.RemoveHyperLinks(mailItem.Body);
-                                    if (mailItem.Parent is Folder)
-                                    {
-                                        messageWrapper.StoreId = (mailItem.Parent as Folder).StoreID;
-                                    }
-                                    messageWrapper.EntryId = mailItem.EntryID;
-
-                                    messages.Add(messageWrapper);
+                                    FillMessageWrapperFromMailItem(mailItem, messageWrapper);
                                 }
                                 else
                                 {
-                                    MessageWrapper messageWrapper = new MessageWrapper();
-                                    messageWrapper.Subject = "One mail item not found";
-                                    messages.Add(messageWrapper);
+                                    messageWrapper.Subject = subject;
+                                    messageWrapper.Sender = string.Empty;
+                                    messageWrapper.Body = string.Empty;
+                                    messageWrapper.EntryId = entryId;
+                                    messageWrapper.InvalidLink = true;
+                                    messageWrapper.StoreId = store;
+                                    messageWrapper.Guid = guid;
                                 }
+                                messageWrapper.LinkLine = line;
+                                messages.Add(messageWrapper);
                             }
                         }
                         catch (FormatException)
@@ -90,17 +81,56 @@ namespace OutlookGTD.Logic
                         }
                     }
                     // Update mail links
-                    if (replaceDictionary.Count > 0)
-                    {
-                        foreach (string key in replaceDictionary.Keys)
-                        {
-                            _taskItem.Body = _taskItem.Body.Replace(key, replaceDictionary[key]);
-                        }
-                        _taskItem.Save();
-                    }
+                    //if (replaceDictionary.Count > 0)
+                    //{w
+                    //    foreach (string key in replaceDictionary.Keys)
+                    //    {
+                    //        _taskItem.Body = _taskItem.Body.Replace(key, replaceDictionary[key]);
+                    //    }
+                    //    _taskItem.Save();
+                    //}
                 }
             }
             return messages;
+        }
+
+        private static void FillMessageWrapperFromMailItem(MailItem mailItem, IMessageWrapper messageWrapper)
+        {
+            messageWrapper.Subject = mailItem.Subject;
+            messageWrapper.Sender = mailItem.SenderName;
+            messageWrapper.Body = Utils.RemoveHyperLinks(mailItem.Body);
+            if (mailItem.Parent is Folder)
+            {
+                messageWrapper.StoreId = (mailItem.Parent as Folder).StoreID;
+            }
+            messageWrapper.EntryId = mailItem.EntryID;
+        }
+
+        private MailItem TryGetMailItem(string store, string entryId)
+        {
+
+            Store currentStore = GetCurrentStore(store);
+
+            try
+            {
+                MailItem mailItem2 = currentStore.Session.GetItemFromID(entryId, currentStore.StoreID);
+                if (mailItem2 != null)
+                {
+                    // TODO: check if the user property is set, if not, set it
+                    // IMAP messages will drop user properties when copied to another folder
+                    // POP3 and exchange messages will keep user properties
+                    // IMAP messages will however keep user properties when moved to a local folder
+                    return mailItem2;
+                }
+            }
+            catch (COMException comEx)
+            {
+                if (comEx.ErrorCode != -2147221233) // Check for item not found
+                {
+                    throw;
+                }
+            }
+            return null;
         }
 
         private MailItem GetMailItem(
@@ -293,6 +323,19 @@ namespace OutlookGTD.Logic
             {
                 throw new FormatException(@"Folder path is of invalid format, should be something like: \\your.name@domain.com\Inbox");
             }   
+        }
+
+
+        public void Get(IMessageWrapper messageWrapper, string storeId, string entryId, string guid)
+        {
+            bool itemHasMoved;
+            string newFolderPath;
+            MailItem mailItem = GetMailItem(storeId, entryId, guid, out itemHasMoved, out newFolderPath);
+            FillMessageWrapperFromMailItem(mailItem, messageWrapper);
+
+            // We still have an instance of the task item
+            _taskItem.Body = _taskItem.Body.Replace(messageWrapper.LinkLine, Utils.BuildMailItemLink(mailItem, newFolderPath, guid));
+            _taskItem.Save();
         }
 
     }

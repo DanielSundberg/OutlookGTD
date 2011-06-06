@@ -8,6 +8,7 @@ using System.Text;
 using System.Xml.Linq;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
+using OutlookGTD.Common;
 using OutlookGTP.UI;
 using OutlookGTD.Logic;
 using Outlook = Microsoft.Office.Interop.Outlook;
@@ -90,7 +91,7 @@ namespace OutlookGTD.UI
             }
         }
 
-        private void _taskPaneControl_MailClicked(MessageWrapper messageWrapper)
+        private void _taskPaneControl_MailClicked(IMessageWrapper messageWrapper)
         {
             try
             {

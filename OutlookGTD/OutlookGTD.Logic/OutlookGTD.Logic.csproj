@@ -48,6 +48,10 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OutlookGTD.Common\OutlookGTD.Common.csproj">
+      <Project>{D4C5AD12-B324-48A3-9153-BBF1526957EB}</Project>
+      <Name>OutlookGTD.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OutlookGTP.UI\OutlookGTP.UI.csproj">
       <Project>{52AD7BE4-B813-4EE4-A32E-82FCFB8F25D0}</Project>
       <Name>OutlookGTP.UI</Name>
