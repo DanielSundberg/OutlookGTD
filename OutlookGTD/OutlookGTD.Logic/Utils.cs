@@ -27,6 +27,8 @@ namespace OutlookGTD.Logic
             stringBuilder.Append(mailItem.EntryID);
             stringBuilder.Append(":");
             stringBuilder.Append(guid);
+            stringBuilder.Append(":");
+            stringBuilder.Append(mailItem.Subject);
             return stringBuilder.ToString();
         }
 

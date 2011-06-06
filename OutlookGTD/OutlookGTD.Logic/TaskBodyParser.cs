@@ -44,9 +44,9 @@ namespace OutlookGTD.Logic
                         {
                             if (line.StartsWith("MailLink"))
                             {
-                                string folderPath, entryId, guid;
+                                string folderPath, entryId, guid, subject;
 
-                                GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid);
+                                GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid, out subject);
 
                                 string store;
                                 List<string> folders;
@@ -251,21 +251,29 @@ namespace OutlookGTD.Logic
             return currentStore;
         }
 
-        public static void GetFolderPathAndEntryId(string mailLinkLine, out string folderPath, out string entryId, out string guid)
+        public static void GetFolderPathAndEntryId(string mailLinkLine, out string folderPath, out string entryId, out string guid, out string subject)
         {
+            subject = string.Empty;
             string data = mailLinkLine.Substring(9);
-            var keys = data.Split(new[] { ':' });
+            var keys = data.Split(new[] { ':' }, 4);
             try
             {
                 folderPath = keys[0];
                 entryId = keys[1];
                 guid = keys[2];
+                // Check if we found a subject
+                if (keys.Count() > 3)
+                {
+                    subject = keys[3];
+                }
             }
             catch (IndexOutOfRangeException exception)
             {
                 throw new FormatException("Mail link is of invalid format", exception);
             }
         }
+
+
 
         public static void ParseStoreAndFolders(string folderPath, out string store, out List<string> folders)
         {
@@ -286,5 +294,6 @@ namespace OutlookGTD.Logic
                 throw new FormatException(@"Folder path is of invalid format, should be something like: \\your.name@domain.com\Inbox");
             }   
         }
+
     }
 }

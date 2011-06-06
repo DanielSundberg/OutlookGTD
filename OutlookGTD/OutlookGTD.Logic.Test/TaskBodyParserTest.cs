@@ -21,7 +21,8 @@ namespace OutlookGTD.Logic.Test
             string entryId;
             string folderPath;
             string guid;
-            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid);
+            string subject;
+            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid, out subject);
             Assert.AreEqual(@"\\daniel.sundberg@tekis.se\Inbox", folderPath);
             Assert.AreEqual("ENTRY_ID", entryId);
             Assert.AreEqual("GUID-GUID", guid);
@@ -38,7 +39,8 @@ namespace OutlookGTD.Logic.Test
             string entryId;
             string folderPath;
             string guid;
-            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid);
+            string subject;
+            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid, out subject);
         }
 
         [TestMethod]
@@ -97,6 +99,18 @@ namespace OutlookGTD.Logic.Test
 
             string cleanBody = Utils.RemoveHyperLinks(mailBody);
             Assert.AreEqual(expectedBody, cleanBody);
+        }
+
+        [TestMethod]
+        public void TestFolderPathWithSubjectIncluded()
+        {
+            string line = @"MailLink=\\daniel.sundberg@tekis.se\Inbox:ENTRY_ID:GUID-GUID:Re:Re:Re:This was original subject";
+            string entryId;
+            string folderPath;
+            string guid;
+            string subject;
+            TaskBodyParser.GetFolderPathAndEntryId(line, out folderPath, out entryId, out guid, out subject);
+            Assert.AreEqual("Re:Re:Re:This was original subject", subject);
         }
     }
 }
