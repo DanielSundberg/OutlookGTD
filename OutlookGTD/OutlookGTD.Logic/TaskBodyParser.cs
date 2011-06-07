@@ -98,7 +98,8 @@ namespace OutlookGTD.Logic
         {
             messageWrapper.Subject = mailItem.Subject;
             messageWrapper.Sender = mailItem.SenderName;
-            messageWrapper.Body = Utils.RemoveHyperLinks(mailItem.Body);
+            string body = Utils.RemoveHyperLinks(mailItem.Body);
+            messageWrapper.Body = body;
             if (mailItem.Parent is Folder)
             {
                 messageWrapper.StoreId = (mailItem.Parent as Folder).StoreID;
@@ -335,7 +336,7 @@ namespace OutlookGTD.Logic
 
             // We still have an instance of the task item
             _taskItem.Body = _taskItem.Body.Replace(messageWrapper.LinkLine, Utils.BuildMailItemLink(mailItem, newFolderPath, guid));
-            _taskItem.Save();
+            //_taskItem.Session.Application.
         }
 
     }
