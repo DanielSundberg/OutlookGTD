@@ -17,6 +17,10 @@
         <button id="LinkToTask"
             label="Link to task..."
             onAction="LinkToTaskClicked"/>
+        <button id="WPFtaskselector"
+          label="WPF task selector..."
+          onAction="WPFTaskSelectorClicked"/>
+
       </contextMenu>
     </contextMenus>
 </customUI>
