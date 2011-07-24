@@ -241,6 +241,7 @@
     </Compile>
     <Compile Include="Ribbon1.cs" />
     <Compile Include="TaskModel.cs" />
+    <Compile Include="TaskViewModel.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>

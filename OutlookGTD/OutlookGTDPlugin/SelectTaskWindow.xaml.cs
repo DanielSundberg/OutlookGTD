@@ -23,5 +23,11 @@ namespace OutlookGTDPlugin
         {
             InitializeComponent();
         }
+
+        private void _textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            (DataContext as TaskViewModel).SearchFilter = _textBox.Text;
+            //treeView.InvalidateVisual();
+        }
     }
 }

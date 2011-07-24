@@ -12,28 +12,24 @@
         
     </Window.Resources>
     <Grid>
-        <TreeView Name="treeView" ItemsSource="{Binding}" HorizontalAlignment="Stretch">
-            <TreeView.ItemTemplate>
-                
-                <HierarchicalDataTemplate ItemsSource="{Binding Path=Animals}">
-                    <TextBlock FontWeight="Bold" Text="{Binding Path=Category}" />
-                    <HierarchicalDataTemplate.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=Name}"/>
-                        </DataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            <TreeView.ItemContainerStyle>
-                <Style>
-                    <Setter Property="TreeViewItem.IsExpanded" Value="True"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=Type}" Value="menu">
-                            <Setter Property="TreeViewItem.IsSelected" Value="True"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Filter: "/>
+            <TextBox Width="200" Height="20" Name="_textBox" TextChanged="_textBox_TextChanged" />
+        </StackPanel>
+        <ListView ItemsSource="{Binding Path=AllAnimals}" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Visibility="{Binding Visible}">
+                        <TextBlock Text="{Binding Path=Name}"/>
+                    </StackPanel>
+                </DataTemplate>
+
+            </ListView.ItemTemplate>
+            
+        </ListView>
     </Grid>
 </Window>

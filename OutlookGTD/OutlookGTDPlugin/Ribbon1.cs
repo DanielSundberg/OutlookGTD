@@ -91,135 +91,14 @@ namespace OutlookGTDPlugin
 
         //    public event PropertyChangedEventHandler PropertyChanged;
         //}
-        public class AnimalCategory
-        {
- 
-
-        private string _category;
-
-        public string Category
-
-        {
-
-            get { return _category; }
-
-            set { _category = value; }
-
-        }
-
- 
-
-        private ObservableCollection<Animal> _animals;
-
-        public ObservableCollection<Animal> Animals
-
-        {
-
-            get
-
-            {
-
-                if (_animals == null)
-
-                    _animals = new ObservableCollection<Animal>();
-
- 
-
-                return _animals;
-
-            }
-
-        }
-
- 
-
-        public AnimalCategory()
-
-        {
-
-        }
-
- 
-
-        public AnimalCategory(
-
-                    string category,
-
-                    ObservableCollection<Animal> animals)
-
-        {
-
-            _category = category;
-
-            _animals = animals;
-
-        }
-
- 
-
-    }
-        public class Animal
-        {
-
-            private string _name;
-
-            public string Name
-            {
-
-                get { return _name; }
-
-                set { _name = value; }
-
-            }
-
-
-
-            public Animal()
-            {
-
-            }
-
-
-
-            public Animal(string name)
-            {
-
-                _name = name;
-
-            }
-
-
-
-        }
 
         public void WPFTaskSelectorClicked(IRibbonControl control)
         {
-            ObservableCollection<AnimalCategory> AnimalCategories
-
-        = new ObservableCollection<AnimalCategory>();
-            ObservableCollection<Animal> animals = new ObservableCollection<Animal>();
-
-            animals.Add(new Animal("California Newt"));
-
-            animals.Add(new Animal("Tomato Frog"));
-
-            animals.Add(new Animal("Green Tree Frog"));
-
-            AnimalCategories.Add(new AnimalCategory("Amphibians", animals));
-
-
-
-            animals = new ObservableCollection<Animal>();
-
-            animals.Add(new Animal("Golden Silk Spider"));
-
-            animals.Add(new Animal("Black Widow Spider"));
-
-            AnimalCategories.Add(new AnimalCategory("Spiders", animals));
             SelectTaskWindow userControl = new SelectTaskWindow();
-            userControl.treeView.DataContext = AnimalCategories;
+            userControl.DataContext = new TaskViewModel();
 
             userControl.Show();
+            
             
         }
 
