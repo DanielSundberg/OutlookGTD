@@ -95,7 +95,7 @@ namespace OutlookGTD.UI
         {
             try
             {
-                MailItem mailItem2 = Application.Session.GetItemFromID(messageWrapper.EntryId, messageWrapper.StoreId);
+                MailItem mailItem2 = (MailItem)Application.Session.GetItemFromID(messageWrapper.EntryId, messageWrapper.StoreId);
                 if (mailItem2 != null)
                 {
                     mailItem2.Display();

@@ -51,7 +51,7 @@ namespace OutlookGTDPlugin
             // Create guid for mail here
             string guid = GetNewOrExistingGuid(mailItem);
 
-            TaskItem taskItem = _application.CreateItem(OlItemType.olTaskItem);
+            TaskItem taskItem = (TaskItem)_application.CreateItem(OlItemType.olTaskItem);
             taskItem.Subject = mailItem.Subject;
             taskItem.Body = Utils.RemoveHyperLinks(mailItem.Body) + "\n\n" + Utils.BuildMailItemLink(mailItem, folder, guid);
             taskItem.Display();
@@ -94,12 +94,10 @@ namespace OutlookGTDPlugin
 
         public void WPFTaskSelectorClicked(IRibbonControl control)
         {
+            List<TaskItem> taskList = TaskModel.FindDefaultTasks(_application);
             SelectTaskWindow userControl = new SelectTaskWindow();
-            userControl.DataContext = new TaskViewModel();
-
+            userControl.DataContext = new SelectTaskViewModel(taskList);
             userControl.Show();
-            
-            
         }
 
         public void LinkToTaskClicked(IRibbonControl control)

@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace OutlookGTDPlugin
 {
@@ -26,8 +27,29 @@ namespace OutlookGTDPlugin
 
         private void _textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            (DataContext as TaskViewModel).SearchFilter = _textBox.Text;
+            (DataContext as SelectTaskViewModel).SearchFilter = _textBox.Text;
             //treeView.InvalidateVisual();
         }
+
     }
+    public class BoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value == true)
+            {
+                return System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                return System.Windows.Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+    }
+
 }
