@@ -11,7 +11,27 @@
             <TextBlock Text="{Binding Title}" Margin="4,2" />
         </HierarchicalDataTemplate>-->
         <local:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+
+        <DataTemplate x:Key="SubjectHeader">
+            <TextBlock Text="Subject" TextAlignment="Left" Width="200" />
+        </DataTemplate>
+        <DataTemplate x:Key="DueDateHeader">
+            <TextBlock Text="Due date" TextAlignment="Left" Width="200" />
+        </DataTemplate>
+        <DataTemplate x:Key="SubjectCellTemplate">
+            <TextBlock Foreground="MediumBlue" 
+                       FontFamily="Calibri" 
+                       Text="{Binding Path=Subject}" 
+                       Visibility="{Binding Visible, Converter={StaticResource boolToVisibilityConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="DueDateCellTemplate">
+            <TextBlock Foreground="MediumBlue" 
+                       FontFamily="Calibri" 
+                       Text="{Binding Path=DateString}" 
+                       Visibility="{Binding Visible, Converter={StaticResource boolToVisibilityConverter}}" />
+        </DataTemplate>
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -22,13 +42,27 @@
             <TextBox Width="200" Height="20" Name="_textBox" TextChanged="_textBox_TextChanged" />
         </StackPanel>
         <ListView ItemsSource="{Binding Path=TaskDisplayItems}" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn
+                        
+                            HeaderTemplate="{StaticResource SubjectHeader}" 
+                            CellTemplate="{StaticResource SubjectCellTemplate}">
+                    </GridViewColumn>
+                    <GridViewColumn 
+                            HeaderTemplate="{StaticResource DueDateHeader}" 
+                            CellTemplate="{StaticResource DueDateCellTemplate}">
+                    </GridViewColumn>
+                </GridView>
+
+            </ListView.View>
             <!--<ListView.View>
                 <GridView>
                     <GridViewColumn Width="300" Header="Subject"/>
                     <GridViewColumn Width="*" Header="Due date"/>
                 </GridView>
             </ListView.View>-->
-            <ListView.ItemTemplate>
+            <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Visibility="{Binding Visible, Converter={StaticResource boolToVisibilityConverter}}">
                         <TextBlock Text="{Binding Path=Subject}" Width="200"/>
@@ -36,7 +70,7 @@
                     </StackPanel>
                 </DataTemplate>
 
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
             
         </ListView>
     </Grid>
