@@ -123,5 +123,19 @@ namespace OutlookGTDPlugin
 
         public event PropertyChangedEventHandler PropertyChanged;
         private string _searchFilter;
+
+        internal void SelectPrev()
+        {
+            var dv = CollectionViewSource.GetDefaultView(_taskDisplayItems);
+            var current = dv.CurrentPosition;
+            dv.MoveCurrentTo(_taskDisplayItems.Reverse().Skip(_taskDisplayItems.Count - current).FirstOrDefault(t => t.Visible));
+        }
+
+        internal void SelectNext()
+        {
+            var dv = CollectionViewSource.GetDefaultView(_taskDisplayItems);
+            var current = dv.CurrentPosition;
+            dv.MoveCurrentTo(_taskDisplayItems.Skip(current + 1).FirstOrDefault(t => t.Visible));
+        }
     }
 }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:local="clr-namespace:OutlookGTDPlugin"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="Window_Loaded" PreviewKeyDown="Window_KeyDown" >
     <Window.Resources>
         <local:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
 
@@ -36,7 +36,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Label Content="Filter: "/>
-            <TextBox Width="200" Height="25" Name="_textBox" TextChanged="_textBox_TextChanged" />
+            <TextBox Width="200" Height="25" Name="_textBox" TextChanged="_textBox_TextChanged"/>
             <Button Width="50" Height="25" Name="_clearButton" Content="Clear" Click="_clearButton_Click" />
          </StackPanel>
         <ListView 

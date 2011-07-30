@@ -94,6 +94,27 @@ namespace OutlookGTDPlugin
                 drawingContext.Pop();
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _textBox.Focus();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down)
+            {
+                (DataContext as SelectTaskViewModel).SelectNext();
+            }
+            else if (e.Key == Key.Up)
+            {
+                (DataContext as SelectTaskViewModel).SelectPrev();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                _textBox.Text = string.Empty;
+            }
+        }
     }
     public class BoolToVisibilityConverter : IValueConverter
     {
