@@ -32,7 +32,8 @@ namespace OutlookGTDPlugin
         private void _textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             (DataContext as SelectTaskViewModel).SearchFilter = _textBox.Text;
-            //treeView.InvalidateVisual();
+            var dv = CollectionViewSource.GetDefaultView((DataContext as SelectTaskViewModel).TaskDisplayItems);
+            dv.MoveCurrentTo((DataContext as SelectTaskViewModel).FirstVisible());
         }
 
         private void _clearButton_Click(object sender, RoutedEventArgs e)

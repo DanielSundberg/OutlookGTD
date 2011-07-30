@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Windows.Data;
 
 namespace OutlookGTDPlugin
 {
@@ -84,6 +85,11 @@ namespace OutlookGTDPlugin
             }
         }
 
+        public TaskDisplayItem FirstVisible()
+        {
+            return _taskDisplayItems.FirstOrDefault(t => t.Visible);
+        }
+
         public string SearchFilter 
         {
             get
@@ -112,7 +118,6 @@ namespace OutlookGTDPlugin
                             a.Visible = false;
                     }
                 }
-                
             }
         }
 

@@ -57,48 +57,12 @@ namespace OutlookGTDPlugin
             taskItem.Display();
         }
 
-        //private class TaskWrapper : INotifyPropertyChanged
-        //{
-        //    private string _title;
-        //    private DateTime _dueDate;
-
-        //    public string Title
-        //    {
-        //        get { return _title; }
-        //        set
-        //        {
-        //            _title = value;
-        //            if (PropertyChanged != null)
-        //            {
-        //                PropertyChanged(this, new PropertyChangedEventArgs("Title"));
-        //            }
-        //        }
-        //    }
-
-
-        //    public DateTime DueDate
-        //    {
-        //        get { return _dueDate; } 
-        //        set 
-        //        { 
-        //            _dueDate = value;
-        //            if (PropertyChanged != null)
-        //            {
-        //                PropertyChanged(this, new PropertyChangedEventArgs("DueDate"));
-        //            }
-        //        }
-        //    }
-
-        //    public event PropertyChangedEventHandler PropertyChanged;
-        //}
-
         public void WPFTaskSelectorClicked(IRibbonControl control)
         {
             List<TaskItem> taskList = TaskModel.FindDefaultTasks(_application);
             SelectTaskWindow userControl = new SelectTaskWindow();
             userControl.DataContext = new SelectTaskViewModel(taskList);
             userControl.Show();
-
         }
 
         public void LinkToTaskClicked(IRibbonControl control)
