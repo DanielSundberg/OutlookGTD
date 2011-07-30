@@ -104,25 +104,10 @@ namespace OutlookGTDPlugin
             set
             {
                 _searchFilter = value;
-                if (string.IsNullOrEmpty(_searchFilter))
-                {
-                    //_allAnimals.ForEach(a => a.Visible = System.Windows.Visibility.Visible);
-                    foreach (var a in _taskDisplayItems)
-                    {
-                        a.Visible = true;
-                    }
-                }
-                else
-                {
-                    //_allAnimals.ForEach(a => a.Visible = (a.Name.ToLower().Contains(_searchFilter.ToLower()) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed));
-                    foreach (var a in _taskDisplayItems)
-                    {
-                        if (a.Subject.ToLower().Contains(_searchFilter.ToLower()))
-                            a.Visible = true;
-                        else
-                            a.Visible = false;
-                    }
-                }
+                
+                var view = CollectionViewSource.GetDefaultView(_taskDisplayItems);
+                view.Filter = null;
+                view.Filter = i => ((TaskDisplayItem)i).Subject.ToLower().Contains(_searchFilter.ToLower());
             }
         }
 

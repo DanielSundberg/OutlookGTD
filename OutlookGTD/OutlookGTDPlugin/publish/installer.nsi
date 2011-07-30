@@ -1,5 +1,5 @@
-!define VERSION "0.2.0.0" 
-!define VERSION_PATH "0_2_0_0"
+!define VERSION "0.3.0.0" 
+!define VERSION_PATH "0_3_0_0"
 VIProductVersion              "${VERSION}" ; set version here
 VIAddVersionKey "FileVersion" "${VERSION}" ; and here!
 VIAddVersionKey "CompanyName" "Daniel Sundberg"
