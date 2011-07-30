@@ -112,8 +112,35 @@ namespace OutlookGTDPlugin
             }
             else if (e.Key == Key.Escape)
             {
+                DialogResult = false;
+            }
+            else if (e.Key == Key.Enter)
+            {
+                DialogResult = true;
+            }
+        }
+
+        private void _okButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        private void _cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+        }
+
+        private void _textBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
                 _textBox.Text = string.Empty;
             }
+        }
+
+        private void _taskListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DialogResult = true;
         }
     }
     public class BoolToVisibilityConverter : IValueConverter

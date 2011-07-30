@@ -33,17 +33,19 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="Filter: "/>
-            <TextBox Width="200" Height="25" Name="_textBox" TextChanged="_textBox_TextChanged"/>
+            <TextBox Width="200" Height="25" Name="_textBox" TextChanged="_textBox_TextChanged" PreviewKeyDown="_textBox_PreviewKeyDown"/>
             <Button Width="50" Height="25" Name="_clearButton" Content="Clear" Click="_clearButton_Click" />
          </StackPanel>
-        <ListView 
+         <ListView 
             IsSynchronizedWithCurrentItem="True" 
             ItemsSource="{Binding Path=TaskDisplayItems}" 
             Grid.Row="1" 
-            Name="_taskListView">
+            Name="_taskListView"
+            MouseDoubleClick="_taskListView_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -59,10 +61,12 @@
                         <GridViewColumnHeader Click="_sortClicked" Tag="DateString"
                                  Content="DateString" />
                     </GridViewColumn>
-                    
                 </GridView>
-
             </ListView.View>
         </ListView>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+            <Button Content="_Cancel" Width="100" Margin="5,2,5,2" Name="_cancelButton" Click="_cancelButton_Click" />
+            <Button Content="_Ok" Width="100" Margin="5,2,5,2" Name="_okButton" Click="_okButton_Click" />
+        </StackPanel>
     </Grid>
 </Window>

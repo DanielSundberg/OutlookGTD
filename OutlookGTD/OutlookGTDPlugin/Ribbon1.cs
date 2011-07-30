@@ -61,8 +61,15 @@ namespace OutlookGTDPlugin
         {
             List<TaskItem> taskList = TaskModel.FindDefaultTasks(_application);
             SelectTaskWindow userControl = new SelectTaskWindow();
-            userControl.DataContext = new SelectTaskViewModel(taskList);
-            userControl.Show();
+            SelectTaskViewModel taskViewModel = new SelectTaskViewModel(taskList);
+            userControl.DataContext = taskViewModel;
+            var result = userControl.ShowDialog();
+            if (result.GetValueOrDefault())
+            {
+                var selectedTask = taskViewModel.GetSelectedTask();
+
+                MessageBox.Show("task: " + selectedTask.Subject);
+            }
         }
 
         public void LinkToTaskClicked(IRibbonControl control)

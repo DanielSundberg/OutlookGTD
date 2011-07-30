@@ -137,5 +137,11 @@ namespace OutlookGTDPlugin
             var current = dv.CurrentPosition;
             dv.MoveCurrentTo(_taskDisplayItems.Skip(current + 1).FirstOrDefault(t => t.Visible));
         }
+
+        internal TaskDisplayItem GetSelectedTask()
+        {
+            var dv = CollectionViewSource.GetDefaultView(_taskDisplayItems);
+            return (TaskDisplayItem)dv.CurrentItem;
+        }
     }
 }
