@@ -67,8 +67,7 @@ namespace OutlookGTDPlugin
             if (result.GetValueOrDefault())
             {
                 var selectedTask = taskViewModel.GetSelectedTask();
-
-                MessageBox.Show("task: " + selectedTask.Subject);
+                LinkMailToTask(selectedTask);
             }
         }
 
@@ -82,25 +81,30 @@ namespace OutlookGTDPlugin
                 if (taskListView.ShowDialog() == DialogResult.OK)
                 {
                     TaskItem taskItem = taskListView.GetSelectedTask();
-                    if (taskItem != null)
-                    {
-                        var selection = _application.ActiveExplorer().Selection.Cast<MailItem>();
-                        var mailItem = selection.ElementAt(0);
-                        var folder = mailItem.Parent as Folder;
-
-                        // Create guid for mail here
-                        string guid = GetNewOrExistingGuid(mailItem);
-
-                        // Append mail link to task
-                        StringBuilder stringBuilder = new StringBuilder(taskItem.Body);
-                        stringBuilder.AppendLine();
-                        stringBuilder.AppendLine(Utils.BuildMailItemLink(mailItem, folder, guid));
-                        taskItem.Body = stringBuilder.ToString();
-                        taskItem.Display();
-                    }
+                    LinkMailToTask(taskItem);
                 }
             }
             
+        }
+
+        private void LinkMailToTask(TaskItem taskItem)
+        {
+            if (taskItem != null)
+            {
+                var selection = _application.ActiveExplorer().Selection.Cast<MailItem>();
+                var mailItem = selection.ElementAt(0);
+                var folder = mailItem.Parent as Folder;
+
+                // Create guid for mail here
+                string guid = GetNewOrExistingGuid(mailItem);
+
+                // Append mail link to task
+                StringBuilder stringBuilder = new StringBuilder(taskItem.Body);
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine(Utils.BuildMailItemLink(mailItem, folder, guid));
+                taskItem.Body = stringBuilder.ToString();
+                taskItem.Display();
+            }
         }
 
 

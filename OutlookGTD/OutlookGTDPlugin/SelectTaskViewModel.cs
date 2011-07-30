@@ -53,16 +53,21 @@ namespace OutlookGTDPlugin
             get { return _subject; }
             set { _subject = value; }
         }
-        public TaskDisplayItem()
+        public TaskDisplayItem(Microsoft.Office.Interop.Outlook.TaskItem taskItem)
         {
-        }
-        public TaskDisplayItem(string title, DateTime date)
-        {
-            _subject = title;
-            _date = date;
+            _subject = taskItem.Subject;
+            _date = taskItem.DueDate;
+            _taskItem = taskItem;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private Microsoft.Office.Interop.Outlook.TaskItem _taskItem;
+
+        public Microsoft.Office.Interop.Outlook.TaskItem TaskItem
+        {
+            get { return _taskItem; }
+            set { _taskItem = value; }
+        }
     }
 
     public class SelectTaskViewModel : INotifyPropertyChanged
@@ -73,7 +78,7 @@ namespace OutlookGTDPlugin
         {
             foreach (Microsoft.Office.Interop.Outlook.TaskItem taskItem in taskList)
             {
-                _taskDisplayItems.Add(new TaskDisplayItem(taskItem.Subject, taskItem.DueDate));
+                _taskDisplayItems.Add(new TaskDisplayItem(taskItem));
             }
         }
 
@@ -138,10 +143,10 @@ namespace OutlookGTDPlugin
             dv.MoveCurrentTo(_taskDisplayItems.Skip(current + 1).FirstOrDefault(t => t.Visible));
         }
 
-        internal TaskDisplayItem GetSelectedTask()
+        internal Microsoft.Office.Interop.Outlook.TaskItem GetSelectedTask()
         {
             var dv = CollectionViewSource.GetDefaultView(_taskDisplayItems);
-            return (TaskDisplayItem)dv.CurrentItem;
+            return ((TaskDisplayItem)dv.CurrentItem).TaskItem;
         }
     }
 }
