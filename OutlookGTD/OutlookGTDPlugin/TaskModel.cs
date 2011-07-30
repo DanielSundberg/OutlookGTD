@@ -14,6 +14,8 @@ namespace OutlookGTDPlugin
 
             Folder taskFolder = (Folder)application.Session.GetDefaultFolder(OlDefaultFolders.olFolderTasks);
             FindTasksInFolderNonRecursive(taskList, taskFolder);
+            // Do a default sort on due date
+            taskList.Sort((a, b) => a.DueDate.CompareTo(b.DueDate));
             return taskList;
         }
 

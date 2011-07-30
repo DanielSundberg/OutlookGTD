@@ -98,6 +98,7 @@ namespace OutlookGTDPlugin
             SelectTaskWindow userControl = new SelectTaskWindow();
             userControl.DataContext = new SelectTaskViewModel(taskList);
             userControl.Show();
+
         }
 
         public void LinkToTaskClicked(IRibbonControl control)

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
+using System.ComponentModel;
 
 namespace OutlookGTDPlugin
 {
@@ -20,6 +21,9 @@ namespace OutlookGTDPlugin
     /// </summary>
     public partial class SelectTaskWindow : Window
     {
+        private GridViewColumnHeader _CurSortCol = null;
+        private SortAdorner _CurAdorner = null;
+
         public SelectTaskWindow()
         {
             InitializeComponent();
@@ -31,6 +35,64 @@ namespace OutlookGTDPlugin
             //treeView.InvalidateVisual();
         }
 
+        private void _clearButton_Click(object sender, RoutedEventArgs e)
+        {
+            _textBox.Text = string.Empty;
+        }
+
+        private void _sortClicked(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader column = sender as GridViewColumnHeader;
+            String field = column.Tag as String;
+
+            if (_CurSortCol != null)
+            {
+              AdornerLayer.GetAdornerLayer(_CurSortCol).Remove(_CurAdorner);
+              _taskListView.Items.SortDescriptions.Clear();
+            }
+
+            ListSortDirection newDir = ListSortDirection.Ascending;
+            if (_CurSortCol == column && _CurAdorner.Direction == newDir)
+              newDir = ListSortDirection.Descending;
+
+            _CurSortCol = column;
+            _CurAdorner = new SortAdorner(_CurSortCol, newDir);
+            AdornerLayer.GetAdornerLayer(_CurSortCol).Add(_CurAdorner);
+            _taskListView.Items.SortDescriptions.Add(new SortDescription(field, newDir));
+        }
+
+        public class SortAdorner : Adorner
+        {
+            private readonly static Geometry _AscGeometry =
+                Geometry.Parse("M 0,0 L 10,0 L 5,5 Z");
+            private readonly static Geometry _DescGeometry =
+                Geometry.Parse("M 0,5 L 10,5 L 5,0 Z");
+
+            public ListSortDirection Direction { get; private set; }
+
+            public SortAdorner(UIElement element, ListSortDirection dir)
+                : base(element)
+            { Direction = dir; }
+
+            protected override void OnRender(DrawingContext drawingContext)
+            {
+                base.OnRender(drawingContext);
+
+                if (AdornedElement.RenderSize.Width < 20)
+                    return;
+
+                drawingContext.PushTransform(
+                    new TranslateTransform(
+                      AdornedElement.RenderSize.Width - 15,
+                      (AdornedElement.RenderSize.Height - 5) / 2));
+
+                drawingContext.DrawGeometry(Brushes.Black, null,
+                    Direction == ListSortDirection.Ascending ?
+                      _AscGeometry : _DescGeometry);
+
+                drawingContext.Pop();
+            }
+        }
     }
     public class BoolToVisibilityConverter : IValueConverter
     {
