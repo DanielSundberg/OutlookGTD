@@ -117,15 +117,21 @@ namespace OutlookGTDPlugin
         internal void SelectPrev()
         {
             var dv = CollectionViewSource.GetDefaultView(_taskDisplayItems);
-            var current = dv.CurrentPosition;
-            dv.MoveCurrentTo(_taskDisplayItems.Reverse().Skip(_taskDisplayItems.Count - current).FirstOrDefault(t => t.Visible));
+            dv.MoveCurrentToPrevious();
+            if (dv.IsCurrentBeforeFirst)
+            {
+                dv.MoveCurrentToFirst();
+            }
         }
 
         internal void SelectNext()
         {
             var dv = CollectionViewSource.GetDefaultView(_taskDisplayItems);
-            var current = dv.CurrentPosition;
-            dv.MoveCurrentTo(_taskDisplayItems.Skip(current + 1).FirstOrDefault(t => t.Visible));
+            dv.MoveCurrentToNext();
+            if (dv.IsCurrentAfterLast)
+            {
+                dv.MoveCurrentToLast();
+            }
         }
 
         internal Microsoft.Office.Interop.Outlook.TaskItem GetSelectedTask()
