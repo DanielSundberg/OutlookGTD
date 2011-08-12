@@ -67,7 +67,8 @@ namespace OutlookGTDPlugin
             if (result.GetValueOrDefault())
             {
                 var selectedTask = taskViewModel.GetSelectedTask();
-                LinkMailToTask(selectedTask);
+                if (selectedTask != null)
+                    LinkMailToTask(selectedTask);
             }
         }
 
