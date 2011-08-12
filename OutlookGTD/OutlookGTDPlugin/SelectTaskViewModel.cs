@@ -137,6 +137,10 @@ namespace OutlookGTDPlugin
         internal Microsoft.Office.Interop.Outlook.TaskItem GetSelectedTask()
         {
             var dv = CollectionViewSource.GetDefaultView(_taskDisplayItems);
+            if (dv.IsCurrentAfterLast || dv.IsCurrentBeforeFirst)
+            {
+                dv.MoveCurrentToNext();
+            }
             return ((TaskDisplayItem)dv.CurrentItem).TaskItem;
         }
     }
