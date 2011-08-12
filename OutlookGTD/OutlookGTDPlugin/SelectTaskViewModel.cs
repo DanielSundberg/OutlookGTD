@@ -141,7 +141,10 @@ namespace OutlookGTDPlugin
             {
                 dv.MoveCurrentToNext();
             }
-            return ((TaskDisplayItem)dv.CurrentItem).TaskItem;
+            if (dv.CurrentItem != null)
+                return ((TaskDisplayItem)dv.CurrentItem).TaskItem;
+            else
+                return null;
         }
     }
 }
